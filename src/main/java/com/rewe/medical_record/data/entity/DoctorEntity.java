@@ -17,6 +17,7 @@ import java.util.Set;
 @Table(name = "doctor")
 @NoArgsConstructor
 @Getter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class DoctorEntity extends BaseEntity {
     @NotBlank
     @Size(min = 4)
@@ -24,13 +25,11 @@ public class DoctorEntity extends BaseEntity {
     @NotNull
     @Past
     @Column(updatable = false)
-    //todo @DateTimeFormat()
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
     @ElementCollection(targetClass = Specialty.class)
     @JoinTable(name = "doctors_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
     @Column(name = "specialty", nullable = false)
     @Enumerated(EnumType.STRING)
-    //todo composite pk
     private Set<Specialty> specialty;
-    private boolean isGp;
 }
