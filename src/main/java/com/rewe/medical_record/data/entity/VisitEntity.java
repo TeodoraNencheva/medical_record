@@ -30,7 +30,7 @@ public class VisitEntity extends BaseEntity {
     @ManyToMany
     @JoinTable(name = "visits_diagnoses",
             joinColumns = @JoinColumn(name = "visit_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "diagnosis_name", referencedColumnName = "name"))
+            inverseJoinColumns = @JoinColumn(name = "diagnosis_id", referencedColumnName = "id"))
     private Set<DiagnosisEntity> diagnoses;
 
     public Set<DiagnosisEntity> getDiagnoses() {

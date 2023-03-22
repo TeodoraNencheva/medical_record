@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class PatientEntity extends BaseEntity {
     @NotBlank
     private String name;
-    @ManyToOne(optional = false)
+    @ManyToOne
     private DoctorEntity gp;
     private boolean isInsured;
 }

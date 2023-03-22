@@ -1,5 +1,6 @@
 package com.rewe.medical_record.data.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -11,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "diagnosis")
 @NoArgsConstructor
 @Getter
-public class DiagnosisEntity {
-    @Id
+public class DiagnosisEntity extends BaseEntity {
+    @Column(nullable = false, unique = true)
     private String name;
     @NotNull
     private String description;
