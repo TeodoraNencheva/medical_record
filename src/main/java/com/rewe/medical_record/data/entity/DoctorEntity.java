@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class DoctorEntity extends BaseEntity {
-    @NotBlank
+    @NotNull
     @Size(min = 4)
     private String name;
     @NotNull

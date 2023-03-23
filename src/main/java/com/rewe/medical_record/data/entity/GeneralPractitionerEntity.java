@@ -9,7 +9,6 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 public class GeneralPractitionerEntity extends DoctorEntity {
-    private String hospital;
     @OneToMany(mappedBy = "gp")
     private Set<PatientEntity> patients;
 }
