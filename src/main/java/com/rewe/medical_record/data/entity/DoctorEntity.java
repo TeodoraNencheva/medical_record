@@ -2,7 +2,6 @@ package com.rewe.medical_record.data.entity;
 
 import com.rewe.medical_record.enums.Specialty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
