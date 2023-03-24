@@ -5,16 +5,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "patient")
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class PatientEntity extends BaseEntity {
     @NotNull
-    @Size(min = 1)
+    @Size(min = 2)
     private String name;
     @ManyToOne
     private GeneralPractitionerEntity gp;
-    private boolean isInsured;
+    private boolean insured;
 }

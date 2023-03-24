@@ -24,7 +24,7 @@ public class DoctorEntity extends BaseEntity {
     @NotNull
     @Past
     @Column(updatable = false)
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
     @ElementCollection(targetClass = Specialty.class)
     @JoinTable(name = "doctors_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
