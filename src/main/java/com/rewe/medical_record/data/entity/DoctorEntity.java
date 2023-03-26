@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -15,7 +17,9 @@ import java.util.Set;
 @Entity
 @Table(name = "doctor")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class DoctorEntity extends BaseEntity {
     @NotNull
@@ -30,5 +34,5 @@ public class DoctorEntity extends BaseEntity {
     @JoinTable(name = "doctors_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
     @Column(name = "specialty", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Set<Specialty> specialty;
+    private Set<Specialty> specialties;
 }
