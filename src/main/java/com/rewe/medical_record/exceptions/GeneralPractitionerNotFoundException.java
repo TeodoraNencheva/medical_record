@@ -1,13 +1,12 @@
 package com.rewe.medical_record.exceptions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@AllArgsConstructor
 @Getter
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "General practitioner not found")
-public class GeneralPractitionerNotFoundException extends RuntimeException{
-    private Long id;
+public class GeneralPractitionerNotFoundException extends BaseException {
+    private final String message = String.format("General practitioner with ID %s not found", this.getId());
+    public GeneralPractitionerNotFoundException(Long id) {
+        super(id);
+        super.setMessage(message);
+    }
 }
