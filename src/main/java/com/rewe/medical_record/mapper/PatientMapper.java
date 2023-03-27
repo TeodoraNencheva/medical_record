@@ -3,42 +3,21 @@ package com.rewe.medical_record.mapper;
 import com.rewe.medical_record.data.dto.patient.AddPatientDto;
 import com.rewe.medical_record.data.dto.patient.PatientInfoDTO;
 import com.rewe.medical_record.data.dto.patient.UpdatePatientDto;
-import com.rewe.medical_record.data.entity.GeneralPractitionerEntity;
 import com.rewe.medical_record.data.entity.PatientEntity;
 import com.rewe.medical_record.data.repository.GeneralPractitionerRepository;
-import com.rewe.medical_record.exceptions.GeneralPractitionerNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-@RequiredArgsConstructor
-public class PatientMapper {
-    private final GeneralPractitionerRepository gpRepository;
-    private final ModelMapper mapper = new ModelMapper();
+@Mapper(componentModel = "spring")
+public abstract class PatientMapper {
+    @Autowired
+    public GeneralPractitionerRepository gpRepository;
 
-    public PatientInfoDTO patientEntityToPatientInfoDto(PatientEntity patientEntity) {
-        PatientInfoDTO result = this.mapper.map(patientEntity, PatientInfoDTO.class);
-        result.setGpId(patientEntity.getGp().getId());
-        return result;
-    }
-
-    public PatientEntity addPatientDtoToPatientEntity(AddPatientDto patientDto) {
-        PatientEntity result = this.mapper.map(patientDto, PatientEntity.class);
-        GeneralPractitionerEntity gp = gpRepository
-                .findById(patientDto.getGpId())
-                .orElseThrow(() -> new GeneralPractitionerNotFoundException(patientDto.getGpId()));
-        result.setGp(gp);
-        result.setId(null);
-        return result;
-    }
-
-    public PatientEntity updatePatientDtoToPatientEntity(UpdatePatientDto patientDto) {
-        PatientEntity result = this.mapper.map(patientDto, PatientEntity.class);
-        GeneralPractitionerEntity gp = gpRepository
-                .findById(patientDto.getGpId())
-                .orElseThrow(() -> new GeneralPractitionerNotFoundException(patientDto.getGpId()));
-        result.setGp(gp);
-        return result;
-    }
+    @Mapping(source = "gp.id", target = "gpId")
+    public abstract PatientInfoDTO patientEntityToPatientInfoDto(PatientEntity patientEntity);
+    @Mapping(expression = "java(gpRepository.findById(patientDto.getGpId()).get())", target = "gp")
+    public abstract PatientEntity addPatientDtoToPatientEntity(AddPatientDto patientDto);
+    @Mapping(expression = "java(gpRepository.findById(patientDto.getGpId()).get())", target = "gp")
+    public abstract PatientEntity updatePatientDtoToPatientEntity(UpdatePatientDto patientDto);
 }

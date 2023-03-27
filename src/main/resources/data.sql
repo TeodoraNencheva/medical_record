@@ -1,5 +1,5 @@
 insert into doctor (name, birth_date)
-values ("Ivan Ivanov", '2000-10-31');
+values ("Ivan Ivanov", '1980-10-31');
 
 insert into general_practitioner (id)
 values (1);
