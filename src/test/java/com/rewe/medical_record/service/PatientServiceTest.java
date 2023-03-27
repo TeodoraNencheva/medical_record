@@ -4,15 +4,14 @@ import com.rewe.medical_record.data.dto.patient.AddPatientDto;
 import com.rewe.medical_record.data.dto.patient.PatientInfoDTO;
 import com.rewe.medical_record.data.entity.GeneralPractitionerEntity;
 import com.rewe.medical_record.data.entity.PatientEntity;
+import com.rewe.medical_record.data.entity.SpecialtyEntity;
 import com.rewe.medical_record.data.repository.PatientRepository;
-import com.rewe.medical_record.enums.Specialty;
 import com.rewe.medical_record.mapper.PatientMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -22,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -33,9 +33,8 @@ class PatientServiceTest {
     private PatientMapper patientMapper;
     @InjectMocks
     private PatientService patientService;
-    private PatientEntity patient;
-    private PatientInfoDTO patientInfoDTO;
-    private AddPatientDto addPatientDto;
+    private PatientEntity firstPatient;
+    private PatientEntity secondPatient;
 
     @BeforeEach
     void setUp() {
@@ -43,34 +42,51 @@ class PatientServiceTest {
         ReflectionTestUtils.setField(gp, "id", 1L);
         ReflectionTestUtils.setField(gp, "name", "Ivan Ivanov");
         ReflectionTestUtils.setField(gp, "birthDate", LocalDate.of(1980, 2, 2));
-        ReflectionTestUtils.setField(gp, "specialties", Set.of(Specialty.CARDIOLOGIST));
-        patient = new PatientEntity("Petar Petrov", gp, true);
-        patientInfoDTO = new PatientInfoDTO(1L, "Petar Petrov", 1L, true);
-        addPatientDto = new AddPatientDto("Petar Petrov", 1L, true);
+        SpecialtyEntity specialty = new SpecialtyEntity();
+        ReflectionTestUtils.setField(specialty, "id", 1L);
+        ReflectionTestUtils.setField(specialty, "name", "Cardiologist");
+        ReflectionTestUtils.setField(gp, "specialties", Set.of(specialty));
+
+        firstPatient = new PatientEntity("Petar Petrov", gp, true);
+        ReflectionTestUtils.setField(firstPatient, "id", 1L);
+        secondPatient = new PatientEntity("Hristo Hristov", gp, false);
+        ReflectionTestUtils.setField(secondPatient, "id", 2L);
     }
 
     @Test
     @DisplayName("Test get all patients")
     void getAllPatientsTest() {
-        List<PatientEntity> list = List.of(patient);
+        List<PatientEntity> list = List.of(firstPatient, secondPatient);
         when(patientRepository.findAll()).thenReturn(list);
-        when(patientMapper.patientEntityToPatientInfoDto(patient)).thenReturn(patientInfoDTO);
-        assertIterableEquals(List.of(patientInfoDTO), patientService.getAllPatients());
+
+        PatientInfoDTO firstDto = new PatientInfoDTO(1L, "Petar Petrov", 1L, true);
+        PatientInfoDTO secondDto = new PatientInfoDTO(2L, "Hristo Hristov", 1L, false);
+        when(patientMapper.patientEntityToPatientInfoDto(firstPatient)).thenReturn(firstDto);
+        when(patientMapper.patientEntityToPatientInfoDto(secondPatient)).thenReturn(secondDto);
+
+        assertIterableEquals(List.of(firstDto, secondDto), patientService.getAllPatients());
     }
 
     @Test
     @DisplayName("Test get patient info test")
     void getPatientInfoTest() {
-        when(patientRepository.findById(anyLong())).thenReturn(Optional.of(patient));
-        when(patientMapper.patientEntityToPatientInfoDto(patient)).thenReturn(patientInfoDTO);
-        assertEquals(patientInfoDTO, patientService.getPatientInfo(1L));
+        when(patientRepository.findById(anyLong())).thenReturn(Optional.of(firstPatient));
+        PatientInfoDTO infoDto = new PatientInfoDTO(1L, "Petar Petrov", 1L, true);
+        when(patientMapper.patientEntityToPatientInfoDto(any(PatientEntity.class))).thenReturn(infoDto);
+
+        assertEquals(infoDto, patientService.getPatientInfo(1L));
     }
 
     @Test
     @DisplayName("Test add patient")
     void addPatientTest() {
-        when(patientMapper.addPatientDtoToPatientEntity(addPatientDto)).thenReturn(patient);
-        when(patientRepository.save(patient)).thenReturn(patient);
-        assertEquals(patientInfoDTO, patientService.addPatient(addPatientDto));
+        AddPatientDto patientDto = new AddPatientDto("Petar Petrov", 1L, true);
+        when(patientMapper.addPatientDtoToPatientEntity(patientDto)).thenReturn(firstPatient);
+        when(patientRepository.save(firstPatient)).thenReturn(firstPatient);
+
+        PatientInfoDTO infoDto = new PatientInfoDTO(1L, "Petar Petrov", 1L, true);
+        when(patientMapper.patientEntityToPatientInfoDto(firstPatient)).thenReturn(infoDto);
+
+        assertEquals(infoDto, patientService.addPatient(patientDto));
     }
 }

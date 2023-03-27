@@ -31,6 +31,7 @@ public class VisitEntity extends BaseEntity {
     private Set<DiagnosisEntity> diagnoses;
     @ManyToOne(optional = false)
     private FeeHistoryEntity fee;
+    private boolean paidByPatient;
     public Set<DiagnosisEntity> getDiagnoses() {
         return Collections.unmodifiableSet(diagnoses);
     }

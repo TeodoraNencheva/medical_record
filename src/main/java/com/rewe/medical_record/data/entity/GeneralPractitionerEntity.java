@@ -15,7 +15,6 @@ import java.util.Set;
 public class GeneralPractitionerEntity extends DoctorEntity {
     @OneToMany(mappedBy = "gp")
     @JsonIgnoreProperties("gp")
-    //todo add to all collections
     private Set<PatientEntity> patients;
     public Set<PatientEntity> getPatients() {
         return Collections.unmodifiableSet(patients);

@@ -20,7 +20,7 @@ public class PatientService {
 
     public List<PatientInfoDTO> getAllPatients() {
         return patientRepository
-                .findAll()
+                .findAllByDeletedFalse()
                 .stream()
                 .map(patientMapper::patientEntityToPatientInfoDto)
                 .toList();
@@ -28,26 +28,24 @@ public class PatientService {
 
     public PatientInfoDTO getPatientInfo(Long id) {
         PatientEntity patientEntity = patientRepository
-                .findById(id)
+                .findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new PatientNotFoundException(id));
         return patientMapper.patientEntityToPatientInfoDto(patientEntity);
     }
 
     public PatientInfoDTO addPatient(AddPatientDto patientDto) {
         PatientEntity patient = patientRepository.save(patientMapper.addPatientDtoToPatientEntity(patientDto));
-        return getPatientInfo(patient.getId());
+        return patientMapper.patientEntityToPatientInfoDto(patient);
     }
 
     public PatientInfoDTO updatePatient(UpdatePatientDto patientDto) {
-        if (patientRepository.findById(patientDto.getId()).isEmpty()) {
-            throw new PatientNotFoundException(patientDto.getId());
-        }
-
         PatientEntity toSave = patientMapper.updatePatientDtoToPatientEntity(patientDto);
         return patientMapper.patientEntityToPatientInfoDto(patientRepository.save(toSave));
     }
 
     public void deletePatient(Long id) {
-        patientRepository.deleteById(id);
+        PatientEntity patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException(id));
+        patient.setDeleted(true);
+        patientRepository.save(patient);
     }
 }

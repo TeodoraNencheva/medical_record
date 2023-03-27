@@ -1,6 +1,5 @@
 package com.rewe.medical_record.data.entity;
 
-import com.rewe.medical_record.enums.Specialty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -9,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -30,9 +30,12 @@ public class DoctorEntity extends BaseEntity {
     @Column(updatable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
-    @ElementCollection(targetClass = Specialty.class)
-    @JoinTable(name = "doctors_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
-    @Column(name = "specialty", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<Specialty> specialties;
+    @NotNull
+    @ManyToMany
+    @JoinTable(name = "doctors_specialties",
+            joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "specialty_id", referencedColumnName = "id"))
+    private Set<SpecialtyEntity> specialties;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 }

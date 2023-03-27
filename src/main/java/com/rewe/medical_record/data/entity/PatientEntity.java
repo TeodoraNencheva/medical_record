@@ -1,5 +1,6 @@
 package com.rewe.medical_record.data.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -20,4 +21,6 @@ public class PatientEntity extends BaseEntity {
     @ManyToOne
     private GeneralPractitionerEntity gp;
     private boolean insured;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 }
