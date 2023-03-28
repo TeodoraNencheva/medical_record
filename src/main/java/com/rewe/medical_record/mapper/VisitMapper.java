@@ -8,6 +8,7 @@ import com.rewe.medical_record.data.repository.DiagnosisRepository;
 import com.rewe.medical_record.data.repository.DoctorRepository;
 import com.rewe.medical_record.data.repository.FeeHistoryRepository;
 import com.rewe.medical_record.data.repository.PatientRepository;
+import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
 import com.rewe.medical_record.exceptions.DoctorNotFoundException;
 import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import org.mapstruct.Mapper;
@@ -33,7 +34,7 @@ public abstract class VisitMapper {
 
     @Mapping(source = "patient.id", target = "patientId")
     @Mapping(source = "doctor.id", target = "doctorId")
-    @Mapping(source = "fee.value", target = "feeValue")
+    @Mapping(source = "fee.price", target = "feePrice")
     @Mapping(target = "diagnoses", source = "diagnoses", qualifiedByName = "diagnosesNames")
     public abstract VisitInfoDto visitEntityToVisitInfoDto(VisitEntity visitEntity);
 
@@ -75,9 +76,10 @@ public abstract class VisitMapper {
             return Collections.emptySet();
         }
 
-        //todo exception handling
         return diagnosesIds.stream()
-                .map(id -> diagnosisRepository.findById(id).orElseThrow())
+                .map(id -> diagnosisRepository
+                        .findById(id)
+                        .orElseThrow(() -> new DiagnosisNotFoundException(id)))
                 .collect(Collectors.toSet());
     }
 

@@ -113,12 +113,12 @@ class DoctorServiceTest {
         when(doctorMapper.updateDoctorDtoToDoctorEntity(updateDoctorDto)).thenReturn(secondDoctor);
 
         DoctorInfoDto doctorInfoDto = new DoctorInfoDto(1L, "Hristo Hristov", LocalDate.of(1985, 1, 1), Set.of("Cardiology", "Oncology"));
+        when(doctorRepository.save(firstDoctor)).thenReturn(firstDoctor);
         when(doctorMapper.doctorEntityToDoctorInfoDto(firstDoctor)).thenReturn(doctorInfoDto);
 
         assertEquals(doctorInfoDto, doctorService.updateDoctor(updateDoctorDto));
         assertEquals(secondDoctor.getName(), firstDoctor.getName());
         assertIterableEquals(secondDoctor.getSpecialties(), firstDoctor.getSpecialties());
-        verify(doctorRepository).save(firstDoctor);
     }
 
     @Test

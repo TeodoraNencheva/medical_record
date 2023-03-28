@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface FeeHistoryRepository extends JpaRepository<FeeHistoryEntity, Long> {
     Optional<FeeHistoryEntity> findTopByOrderByEffectiveFromDesc();
-    //todo test
 }

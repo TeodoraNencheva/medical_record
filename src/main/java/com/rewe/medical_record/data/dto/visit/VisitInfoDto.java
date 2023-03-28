@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +19,6 @@ public class VisitInfoDto {
     private Long doctorId;
     private LocalDateTime dateTime;
     private Set<String> diagnoses;
-    private BigDecimal feeValue;
+    private BigDecimal feePrice;
     private boolean paidByPatient;
 }

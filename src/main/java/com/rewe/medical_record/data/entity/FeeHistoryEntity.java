@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,8 +19,8 @@ import java.time.LocalDate;
 @Setter
 public class FeeHistoryEntity extends BaseEntity {
     @NotNull
-    private LocalDate effectiveFrom = LocalDate.now();
+    private LocalDate effectiveFrom;
     @NotNull
     @Positive
-    private BigDecimal value;
+    private BigDecimal price;
 }

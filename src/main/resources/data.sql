@@ -13,7 +13,7 @@ values (1, 1);
 insert into patient (name, gp_id, insured)
 values ("Petya Petrova", 1, 1);
 
-insert into fee_history (value, effective_from)
+insert into fee_history (price, effective_from)
 values (2.90, '2000-01-01');
 
 insert into diagnosis (name, description)
