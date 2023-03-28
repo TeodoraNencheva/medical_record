@@ -12,6 +12,6 @@ public class ExistingDoctorIdValidator implements ConstraintValidator<ExistingDo
     private final DoctorRepository doctorRepository;
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        return Objects.nonNull(value) && doctorRepository.findAllByIdAndDeletedFalse(value).isPresent();
+        return Objects.nonNull(value) && doctorRepository.findByIdAndDeletedFalse(value).isPresent();
     }
 }

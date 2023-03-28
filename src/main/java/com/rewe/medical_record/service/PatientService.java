@@ -7,6 +7,7 @@ import com.rewe.medical_record.data.entity.PatientEntity;
 import com.rewe.medical_record.data.repository.PatientRepository;
 import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import com.rewe.medical_record.mapper.PatientMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +40,16 @@ public class PatientService {
     }
 
     public PatientInfoDTO updatePatient(UpdatePatientDto patientDto) {
+        if (patientRepository.findByIdAndDeletedFalse(patientDto.getId()).isEmpty()) {
+            throw new PatientNotFoundException(patientDto.getId());
+        }
+
         PatientEntity toSave = patientMapper.updatePatientDtoToPatientEntity(patientDto);
         return patientMapper.patientEntityToPatientInfoDto(patientRepository.save(toSave));
     }
 
     public void deletePatient(Long id) {
-        PatientEntity patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException(id));
+        PatientEntity patient = patientRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new PatientNotFoundException(id));
         patient.setDeleted(true);
         patientRepository.save(patient);
     }

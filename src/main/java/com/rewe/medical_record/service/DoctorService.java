@@ -26,7 +26,7 @@ public class DoctorService {
     }
 
     public DoctorInfoDto getDoctorInfo(Long id) {
-        DoctorEntity doctorEntity = doctorRepository.findAllByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
+        DoctorEntity doctorEntity = doctorRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
         return doctorMapper.doctorEntityToDoctorInfoDto(doctorEntity);
     }
 
@@ -37,17 +37,19 @@ public class DoctorService {
 
     public DoctorInfoDto updateDoctor(UpdateDoctorDto doctorDto) {
         DoctorEntity toChange = doctorRepository
-                .findAllByIdAndDeletedFalse(doctorDto.getId())
+                .findByIdAndDeletedFalse(doctorDto.getId())
                 .orElseThrow(() -> new DoctorNotFoundException(doctorDto.getId()));
+
         DoctorEntity newProperties = doctorMapper.updateDoctorDtoToDoctorEntity(doctorDto);
-        toChange.setName(doctorDto.getName());
+        toChange.setName(newProperties.getName());
         toChange.setSpecialties(newProperties.getSpecialties());
+
         doctorRepository.save(toChange);
         return doctorMapper.doctorEntityToDoctorInfoDto(toChange);
     }
 
     public void deleteDoctor(Long id) {
-        DoctorEntity doctorEntity = doctorRepository.findById(id).orElseThrow(() -> new DoctorNotFoundException(id));
+        DoctorEntity doctorEntity = doctorRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
         doctorEntity.setDeleted(true);
         doctorRepository.save(doctorEntity);
     }

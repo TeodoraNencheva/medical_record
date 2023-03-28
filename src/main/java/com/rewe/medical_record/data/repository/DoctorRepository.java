@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface DoctorRepository extends JpaRepository<DoctorEntity, Long> {
     List<DoctorEntity> findAllByDeletedFalse();
-    Optional<DoctorEntity> findAllByIdAndDeletedFalse(Long id);
+    Optional<DoctorEntity> findByIdAndDeletedFalse(Long id);
 }
