@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface SpecialtyRepository extends JpaRepository<SpecialtyEntity, Long> {
     Optional<SpecialtyEntity> findByName(String name);
+    //todo test
 }

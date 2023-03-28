@@ -44,8 +44,8 @@ public class DoctorService {
         toChange.setName(newProperties.getName());
         toChange.setSpecialties(newProperties.getSpecialties());
 
-        doctorRepository.save(toChange);
-        return doctorMapper.doctorEntityToDoctorInfoDto(toChange);
+        DoctorEntity saved = doctorRepository.save(toChange);
+        return doctorMapper.doctorEntityToDoctorInfoDto(saved);
     }
 
     public void deleteDoctor(Long id) {

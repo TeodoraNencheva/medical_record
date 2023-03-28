@@ -16,7 +16,4 @@ public class GeneralPractitionerEntity extends DoctorEntity {
     @OneToMany(mappedBy = "gp")
     @JsonIgnoreProperties("gp")
     private Set<PatientEntity> patients;
-    public Set<PatientEntity> getPatients() {
-        return Collections.unmodifiableSet(patients);
-    }
 }
