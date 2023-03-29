@@ -53,4 +53,16 @@ public class PatientService {
         patient.setDeleted(true);
         patientRepository.save(patient);
     }
+
+    public List<PatientInfoDTO> getAllInsuredPatients() {
+        return patientRepository
+                .findAllByInsuredTrue()
+                .stream()
+                .map(patientMapper::patientEntityToPatientInfoDto)
+                .toList();
+    }
+
+    public double getNotInsuredPatientsPercentage() {
+        return ((1.0 * patientRepository.countAllByInsuredFalse()) / patientRepository.count()) * 100;
+    }
 }

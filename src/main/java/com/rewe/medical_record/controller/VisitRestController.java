@@ -5,6 +5,9 @@ import com.rewe.medical_record.data.dto.visit.UpdateVisitDto;
 import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
 import com.rewe.medical_record.service.ResponseService;
 import com.rewe.medical_record.service.VisitService;
+import com.rewe.medical_record.validation.ExistingDiagnosisId;
+import com.rewe.medical_record.validation.ExistingDoctorId;
+import com.rewe.medical_record.validation.ExistingPatientId;
 import com.rewe.medical_record.validation.ExistingVisitId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -48,5 +52,25 @@ public class VisitRestController {
 
         Map<String, Object> body = ResponseService.generateGeneralResponse("Visit with the given ID deleted");
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/all-visits-income")
+    public BigDecimal getAllVisitsTotalIncome() {
+        return visitService.getTotalVisitsIncome();
+    }
+
+    @GetMapping("/visits-income")
+    public BigDecimal getAllVisitsTotalIncomeByDoctorId(@ExistingDoctorId @RequestParam Long doctorId) {
+        return visitService.getAllVisitsIncomeByDoctorId(doctorId);
+    }
+
+    @GetMapping("/visits-count-by-patient")
+    public int getVisitsCountByPatientId(@ExistingPatientId @RequestParam Long patientId) {
+        return visitService.getVisitsCountByPatientId(patientId);
+    }
+
+    @GetMapping("/visits-count-by-diagnosis")
+    public int getVisitsCountByDiagnosisId(@ExistingDiagnosisId @RequestParam Long diagnosisId) {
+        return visitService.getVisitsCountByDiagnosisId(diagnosisId);
     }
 }

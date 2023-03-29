@@ -3,13 +3,17 @@ package com.rewe.medical_record.service;
 import com.rewe.medical_record.data.dto.visit.AddVisitDto;
 import com.rewe.medical_record.data.dto.visit.UpdateVisitDto;
 import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
+import com.rewe.medical_record.data.entity.DiagnosisEntity;
 import com.rewe.medical_record.data.entity.VisitEntity;
+import com.rewe.medical_record.data.repository.DiagnosisRepository;
 import com.rewe.medical_record.data.repository.VisitRepository;
+import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
 import com.rewe.medical_record.exceptions.VisitNotFoundException;
 import com.rewe.medical_record.mapper.VisitMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -17,6 +21,7 @@ import java.util.List;
 public class VisitService {
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
+    private final DiagnosisRepository diagnosisRepository;
 
     public List<VisitInfoDto> getAllVisits() {
         return visitRepository
@@ -54,5 +59,24 @@ public class VisitService {
         VisitEntity visitEntity = visitRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new VisitNotFoundException(id));
         visitEntity.setDeleted(true);
         visitRepository.save(visitEntity);
+    }
+
+    public BigDecimal getTotalVisitsIncome() {
+        return visitRepository.getAllVisitsIncome();
+    }
+
+    public BigDecimal getAllVisitsIncomeByDoctorId(Long doctorId) {
+        return visitRepository.getVisitsIncomeByDoctorId(doctorId);
+    }
+
+    public int getVisitsCountByPatientId(Long patientId) {
+        return visitRepository.getVisitsCountByPatientId(patientId);
+    }
+
+    public int getVisitsCountByDiagnosisId(Long diagnosisId) {
+        DiagnosisEntity diagnosisEntity = diagnosisRepository
+                .findByIdAndDeletedFalse(diagnosisId)
+                .orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
+        return visitRepository.countAllByDiagnosesContaining(diagnosisEntity);
     }
 }

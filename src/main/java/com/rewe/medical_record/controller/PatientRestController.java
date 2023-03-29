@@ -50,4 +50,14 @@ public class PatientRestController {
         Map<String, Object> body = ResponseService.generateGeneralResponse("Patient with the given ID deleted");
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
+
+    @GetMapping("/insured")
+    public ResponseEntity<List<PatientInfoDTO>> getAllInsuredPatients() {
+        return ResponseEntity.ok(patientService.getAllInsuredPatients());
+    }
+
+    @GetMapping("/not-insured-count")
+    public Double getNotInsuredPatientsPercentage() {
+        return patientService.getNotInsuredPatientsPercentage();
+    }
 }

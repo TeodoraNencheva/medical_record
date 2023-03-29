@@ -16,4 +16,6 @@ public class DiagnosisEntity extends BaseEntity {
     private String name;
     @NotNull
     private String description;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 }
