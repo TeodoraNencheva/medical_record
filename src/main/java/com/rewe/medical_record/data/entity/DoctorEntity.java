@@ -1,5 +1,6 @@
 package com.rewe.medical_record.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -28,7 +29,6 @@ public class DoctorEntity extends BaseEntity {
     @NotNull
     @Past
     @Column(updatable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
     @NotNull
     @ManyToMany

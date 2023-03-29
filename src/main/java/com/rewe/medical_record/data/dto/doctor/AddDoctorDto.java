@@ -1,5 +1,6 @@
 package com.rewe.medical_record.data.dto.doctor;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rewe.medical_record.validation.ValidSpecialties;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -22,6 +23,7 @@ public class AddDoctorDto {
     private String name;
     @NotNull(message = "Birthdate is required")
     @Past(message = "Birthdate should be a past date")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
     @ValidSpecialties
     private Set<String> specialties;
