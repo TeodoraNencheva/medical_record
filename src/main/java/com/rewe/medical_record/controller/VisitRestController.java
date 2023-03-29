@@ -19,8 +19,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/visit")
-public class VisitController {
+@RequestMapping("/visits")
+public class VisitRestController {
     private final VisitService visitService;
     @GetMapping
     public ResponseEntity<List<VisitInfoDto>> getAllVisits() {

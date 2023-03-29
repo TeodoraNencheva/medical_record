@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("/doctors")
 @RequiredArgsConstructor
 @Validated
-public class DoctorController {
+public class DoctorRestController {
     private final DoctorService doctorService;
     @GetMapping
     public ResponseEntity<List<DoctorInfoDto>> getAllDoctors() {
