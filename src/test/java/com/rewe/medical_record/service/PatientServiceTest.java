@@ -17,6 +17,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -141,5 +142,39 @@ class PatientServiceTest {
         patientService.deletePatient(1L);
         assertTrue(firstPatient.isDeleted());
         verify(patientRepository).save(firstPatient);
+    }
+
+    @Test
+    @DisplayName("Test get all insured patients")
+    void testGetAllInsuredPatients() {
+        PatientInfoDTO infoDTO = new PatientInfoDTO(1L, "Petar Petrov", 1L, true);
+        when(patientRepository.findAllByInsuredTrueAndDeletedFalse()).thenReturn(List.of(firstPatient));
+        when(patientMapper.patientEntityToPatientInfoDto(firstPatient)).thenReturn(infoDTO);
+
+        assertIterableEquals(List.of(infoDTO), patientService.getAllInsuredPatients());
+    }
+
+    @Test
+    @DisplayName("Test get insured patients percentage")
+    void testGetInsuredPatientsPercentage() {
+        when(patientRepository.countAllByInsuredFalseAndDeletedFalse()).thenReturn(3L);
+        when(patientRepository.countAllByDeletedFalse()).thenReturn(9L);
+        assertEquals(new BigDecimal("33.33"), patientService.getNotInsuredPatientsPercentage());
+    }
+
+    @Test
+    @DisplayName("Test get insured patients percentage")
+    void testGetInsuredPatientsPercentage2() {
+        when(patientRepository.countAllByInsuredFalseAndDeletedFalse()).thenReturn(6L);
+        when(patientRepository.countAllByDeletedFalse()).thenReturn(9L);
+        assertEquals(new BigDecimal("66.67"), patientService.getNotInsuredPatientsPercentage());
+    }
+
+    @Test
+    @DisplayName("Test get insured patients percentage when none")
+    void testGetInsuredPatientsPercentageWhenNone() {
+        when(patientRepository.countAllByInsuredFalseAndDeletedFalse()).thenReturn(0L);
+        when(patientRepository.countAllByDeletedFalse()).thenReturn(9L);
+        assertEquals(new BigDecimal("0.00"), patientService.getNotInsuredPatientsPercentage());
     }
 }

@@ -66,11 +66,11 @@ public class VisitService {
         return visitRepository.getVisitsIncomeByDoctorId(doctorId);
     }
 
-    public int countAllByPatientId(Long patientId) {
+    public long countAllByPatientId(Long patientId) {
         return visitRepository.countAllByPatientId(patientId);
     }
 
-    public int getVisitsCountByDiagnosisId(Long diagnosisId) {
-        return visitRepository.countAllByDiagnosisId(diagnosisId);
+    public long countAllByContainingDiagnosisId(Long diagnosisId) {
+        return visitRepository.countAllByContainingDiagnosisId(diagnosisId);
     }
 }

@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -132,5 +133,33 @@ class VisitServiceTest {
     void testDeleteVisitWithInvalidId() {
         when(visitRepository.findByIdAndDeletedFalse(anyLong())).thenReturn(Optional.empty());
         assertThrows(VisitNotFoundException.class, () -> visitService.deleteVisit(1L));
+    }
+
+    @Test
+    @DisplayName("Test getTotalVisitsIncome()")
+    void testGetTotalVisitsIncome() {
+        when(visitRepository.getAllVisitsIncome()).thenReturn(new BigDecimal("115.93"));
+        assertEquals(new BigDecimal("115.93"), visitService.getTotalVisitsIncome());
+    }
+
+    @Test
+    @DisplayName("Test getVisitsIncomeByDoctorId")
+    void testGetVisitsIncomeByDoctorId() {
+        when(visitRepository.getVisitsIncomeByDoctorId(anyLong())).thenReturn(new BigDecimal("98.43"));
+        assertEquals(new BigDecimal("98.43"), visitService.getVisitsIncomeByDoctorId(5L));
+    }
+
+    @Test
+    @DisplayName("Test countAllByPatientId")
+    void testCountAllByPatientId() {
+        when(visitRepository.countAllByPatientId(anyLong())).thenReturn(54L);
+        assertEquals(54L, visitService.countAllByPatientId(4L));
+    }
+
+    @Test
+    @DisplayName("Test countAllByContainingDiagnosisId")
+    void testCountAllByContainingDiagnosisId() {
+        when(visitRepository.countAllByContainingDiagnosisId(anyLong())).thenReturn(32L);
+        assertEquals(32L, visitService.countAllByContainingDiagnosisId(6L));
     }
 }

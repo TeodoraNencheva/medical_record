@@ -17,12 +17,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -135,5 +137,12 @@ class DoctorServiceTest {
         doctorService.deleteDoctor(1L);
         assertTrue(firstDoctor.isDeleted());
         verify(doctorRepository).save(firstDoctor);
+    }
+
+    @Test
+    @DisplayName("Test countByIncomeGreaterThan")
+    void testCountByIncomeGreaterThan() {
+        when(doctorRepository.countByIncomeGreaterThan(any(BigDecimal.class))).thenReturn(5);
+        assertEquals(5, doctorService.countByIncomeGreaterThan(new BigDecimal(12)));
     }
 }

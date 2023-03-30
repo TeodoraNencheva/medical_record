@@ -6,8 +6,6 @@ import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
 import com.rewe.medical_record.service.ResponseService;
 import com.rewe.medical_record.service.VisitService;
 import com.rewe.medical_record.validation.ExistingDiagnosisId;
-import com.rewe.medical_record.validation.ExistingDoctorId;
-import com.rewe.medical_record.validation.ExistingPatientId;
 import com.rewe.medical_record.validation.ExistingVisitId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +72,7 @@ public class VisitRestController {
     query 5
      */
     @GetMapping("/visits-count-by-patient")
-    public int getVisitsCountByPatientId(@RequestParam Long patientId) {
+    public long getVisitsCountByPatientId(@RequestParam Long patientId) {
         return visitService.countAllByPatientId(patientId);
     }
 
@@ -82,7 +80,7 @@ public class VisitRestController {
     query 6
      */
     @GetMapping("/visits-count-by-diagnosis")
-    public int getVisitsCountByDiagnosisId(@ExistingDiagnosisId @RequestParam Long diagnosisId) {
-        return visitService.getVisitsCountByDiagnosisId(diagnosisId);
+    public long getVisitsCountByDiagnosisId(@ExistingDiagnosisId @RequestParam Long diagnosisId) {
+        return visitService.countAllByContainingDiagnosisId(diagnosisId);
     }
 }

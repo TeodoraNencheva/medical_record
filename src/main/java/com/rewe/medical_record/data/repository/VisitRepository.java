@@ -20,10 +20,10 @@ public interface VisitRepository extends JpaRepository<VisitEntity, Long> {
             "where v.doctor.id=:id")
     BigDecimal getVisitsIncomeByDoctorId(Long id);
 
-    int countAllByPatientId(Long id);
+    long countAllByPatientId(Long id);
 
     @Query("select count(v) from VisitEntity v where " +
             ":id in (select d.id from DiagnosisEntity d " +
             "where d member of v.diagnoses)")
-    int countAllByDiagnosisId(Long id);
+    long countAllByContainingDiagnosisId(Long id);
 }

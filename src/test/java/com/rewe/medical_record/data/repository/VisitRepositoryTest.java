@@ -74,8 +74,8 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(second);
         testEntityManager.persistAndFlush(third);
 
-        assertEquals(2, visitRepository.countAllByPatientId(first.getPatient().getId()));
-        assertEquals(1, visitRepository.countAllByPatientId(third.getPatient().getId()));
+        assertEquals(2L, visitRepository.countAllByPatientId(first.getPatient().getId()));
+        assertEquals(1L, visitRepository.countAllByPatientId(third.getPatient().getId()));
     }
 
     @Test
@@ -85,7 +85,7 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(second);
         testEntityManager.persistAndFlush(third);
 
-        assertEquals(1, visitRepository.countAllByDiagnosisId(first.getDiagnoses().stream().toList().get(0).getId()));
-        assertEquals(2, visitRepository.countAllByDiagnosisId(second.getDiagnoses().stream().toList().get(0).getId()));
+        assertEquals(1L, visitRepository.countAllByContainingDiagnosisId(first.getDiagnoses().stream().toList().get(0).getId()));
+        assertEquals(2L, visitRepository.countAllByContainingDiagnosisId(second.getDiagnoses().stream().toList().get(0).getId()));
     }
 }
