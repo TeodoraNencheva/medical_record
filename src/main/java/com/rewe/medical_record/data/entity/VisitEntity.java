@@ -6,11 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,7 +32,7 @@ public class VisitEntity extends BaseEntity {
     @JoinTable(name = "visits_diagnoses",
             joinColumns = @JoinColumn(name = "visit_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "diagnosis_id", referencedColumnName = "id"))
-    private Set<DiagnosisEntity> diagnoses;
+    private Set<DiagnosisEntity> diagnoses = new HashSet<>();
     @ManyToOne(optional = false)
     private FeeHistoryEntity fee;
     private boolean paidByPatient;

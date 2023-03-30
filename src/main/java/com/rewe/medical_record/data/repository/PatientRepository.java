@@ -11,7 +11,9 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long> {
 
     Optional<PatientEntity> findByIdAndDeletedFalse(Long id);
 
-    List<PatientEntity> findAllByInsuredTrue();
+    List<PatientEntity> findAllByInsuredTrueAndDeletedFalse();
 
-    long countAllByInsuredFalse();
+    long countAllByInsuredFalseAndDeletedFalse();
+
+    long countAllByDeletedFalse();
 }

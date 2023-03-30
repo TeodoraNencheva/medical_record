@@ -7,10 +7,11 @@ import com.rewe.medical_record.data.entity.PatientEntity;
 import com.rewe.medical_record.data.repository.PatientRepository;
 import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import com.rewe.medical_record.mapper.PatientMapper;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -56,13 +57,14 @@ public class PatientService {
 
     public List<PatientInfoDTO> getAllInsuredPatients() {
         return patientRepository
-                .findAllByInsuredTrue()
+                .findAllByInsuredTrueAndDeletedFalse()
                 .stream()
                 .map(patientMapper::patientEntityToPatientInfoDto)
                 .toList();
     }
 
-    public double getNotInsuredPatientsPercentage() {
-        return ((1.0 * patientRepository.countAllByInsuredFalse()) / patientRepository.count()) * 100;
+    public BigDecimal getNotInsuredPatientsPercentage() {
+        double result = ((1.0 * patientRepository.countAllByInsuredFalseAndDeletedFalse()) / patientRepository.countAllByDeletedFalse()) * 100;
+        return new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
     }
 }

@@ -11,9 +11,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ValidDiagnosesIdsValidator implements ConstraintValidator<ValidDiagnosesIds, Set<Long>> {
     private final DiagnosisRepository diagnosisRepository;
+
     @Override
     public boolean isValid(Set<Long> value, ConstraintValidatorContext context) {
-        return Objects.nonNull(value) && (value.isEmpty() ||
-                value.stream().allMatch(id -> diagnosisRepository.findById(id).isPresent()));
+        return Objects.nonNull(value) && !value.isEmpty() &&
+                value.stream().allMatch(id -> diagnosisRepository.findById(id).isPresent());
     }
 }

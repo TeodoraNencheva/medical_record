@@ -1,6 +1,5 @@
 package com.rewe.medical_record.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -9,10 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,7 +33,7 @@ public class DoctorEntity extends BaseEntity {
     @JoinTable(name = "doctors_specialties",
             joinColumns = @JoinColumn(name = "doctor_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_id", referencedColumnName = "id"))
-    private Set<SpecialtyEntity> specialties;
+    private Set<SpecialtyEntity> specialties = new HashSet<>();
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 }

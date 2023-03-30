@@ -54,21 +54,33 @@ public class VisitRestController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
+    /*
+    query 3
+     */
     @GetMapping("/all-visits-income")
     public BigDecimal getAllVisitsTotalIncome() {
         return visitService.getTotalVisitsIncome();
     }
 
-    @GetMapping("/visits-income")
-    public BigDecimal getAllVisitsTotalIncomeByDoctorId(@ExistingDoctorId @RequestParam Long doctorId) {
-        return visitService.getAllVisitsIncomeByDoctorId(doctorId);
+    /*
+    query 4
+     */
+    @GetMapping("/visits-income-by-doctor")
+    public BigDecimal getVisitsIncomeByDoctorId(@RequestParam Long doctorId) {
+        return visitService.getVisitsIncomeByDoctorId(doctorId);
     }
 
+    /*
+    query 5
+     */
     @GetMapping("/visits-count-by-patient")
-    public int getVisitsCountByPatientId(@ExistingPatientId @RequestParam Long patientId) {
-        return visitService.getVisitsCountByPatientId(patientId);
+    public int getVisitsCountByPatientId(@RequestParam Long patientId) {
+        return visitService.countAllByPatientId(patientId);
     }
 
+    /*
+    query 6
+     */
     @GetMapping("/visits-count-by-diagnosis")
     public int getVisitsCountByDiagnosisId(@ExistingDiagnosisId @RequestParam Long diagnosisId) {
         return visitService.getVisitsCountByDiagnosisId(diagnosisId);

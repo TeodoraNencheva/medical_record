@@ -7,12 +7,14 @@ import com.rewe.medical_record.service.DoctorService;
 import com.rewe.medical_record.service.ResponseService;
 import com.rewe.medical_record.validation.ExistingDoctorId;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +24,12 @@ import java.util.Map;
 @Validated
 public class DoctorRestController {
     private final DoctorService doctorService;
+
     @GetMapping
     public ResponseEntity<List<DoctorInfoDto>> getAllDoctors() {
         return ResponseEntity.ok(doctorService.getAllDoctors());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<DoctorInfoDto> getDoctorInfo(@ExistingDoctorId @PathVariable Long id) {
         return ResponseEntity.ok(doctorService.getDoctorInfo(id));
@@ -47,5 +51,13 @@ public class DoctorRestController {
 
         Map<String, Object> body = ResponseService.generateGeneralResponse("Doctor with the given ID deleted");
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    /*
+    query 7
+     */
+    @GetMapping("/with-greater-income-count")
+    public int getDoctorCountWithGreaterIncomeThan(@RequestParam @Positive BigDecimal income) {
+        return doctorService.countByIncomeGreaterThan(income);
     }
 }

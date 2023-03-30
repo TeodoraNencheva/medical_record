@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(validatedBy = ValidSpecialtiesValidation.class)
 public @interface ValidSpecialties {
-    String message() default "Specialties are required and must be valid";
+    String message() default "Please provide valid specialty names or empty collection";
 
     Class<?>[] groups() default {};
 

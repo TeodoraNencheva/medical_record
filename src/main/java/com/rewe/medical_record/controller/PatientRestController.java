@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +52,19 @@ public class PatientRestController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
+    /*
+    query 1
+     */
     @GetMapping("/insured")
     public ResponseEntity<List<PatientInfoDTO>> getAllInsuredPatients() {
         return ResponseEntity.ok(patientService.getAllInsuredPatients());
     }
 
-    @GetMapping("/not-insured-count")
-    public Double getNotInsuredPatientsPercentage() {
+    /*
+    query 2
+     */
+    @GetMapping("/not-insured-percentage")
+    public BigDecimal getNotInsuredPatientsPercentage() {
         return patientService.getNotInsuredPatientsPercentage();
     }
 }

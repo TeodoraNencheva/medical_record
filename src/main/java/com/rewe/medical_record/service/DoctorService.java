@@ -10,6 +10,7 @@ import com.rewe.medical_record.mapper.DoctorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -52,5 +53,9 @@ public class DoctorService {
         DoctorEntity doctorEntity = doctorRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
         doctorEntity.setDeleted(true);
         doctorRepository.save(doctorEntity);
+    }
+
+    public int countByIncomeGreaterThan(BigDecimal income) {
+        return doctorRepository.countByIncomeGreaterThan(income);
     }
 }

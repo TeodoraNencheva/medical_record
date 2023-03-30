@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,5 +16,5 @@ import java.util.Set;
 public class GeneralPractitionerEntity extends DoctorEntity {
     @OneToMany(mappedBy = "gp")
     @JsonIgnoreProperties("gp")
-    private Set<PatientEntity> patients;
+    private Set<PatientEntity> patients = new HashSet<>();
 }
