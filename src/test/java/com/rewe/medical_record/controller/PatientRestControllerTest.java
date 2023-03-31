@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,8 +120,8 @@ class PatientRestControllerTest {
 
         UpdatePatientDto updatePatientDto = new UpdatePatientDto(2L, "Angel Angelov", 1L, true);
         mockMvc.perform(put("/patients")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatePatientDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatePatientDto)))
                 .andExpect(status().isOk())
                 .andExpect((jsonPath("$.id").value(equalTo(2))))
                 .andExpect((jsonPath("$.name").value(equalTo("Angel Angelov"))))
@@ -154,5 +155,34 @@ class PatientRestControllerTest {
         when(patientRepository.findByIdAndDeletedFalse(anyLong())).thenReturn(Optional.empty());
         mockMvc.perform(delete("/patients/{id}", 1L))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Test get insured patients")
+    void testGetInsuredPatients() throws Exception {
+        PatientInfoDTO first = new PatientInfoDTO(1L, "Angel Angelov", 3L, true);
+        PatientInfoDTO second = new PatientInfoDTO(2L, "Filip Filipov", 8L, false);
+        when(patientService.getAllInsuredPatients()).thenReturn(List.of(first, second));
+
+        mockMvc.perform(get("/patients/insured"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$.size()").value(equalTo(2))))
+                .andExpect((jsonPath("$[0].id").value(equalTo(1))))
+                .andExpect((jsonPath("$[0].name").value(equalTo("Angel Angelov"))))
+                .andExpect((jsonPath("$[0].gpId").value(equalTo(3))))
+                .andExpect((jsonPath("$[0].insured").value(equalTo(true))))
+                .andExpect((jsonPath("$[1].id").value(equalTo(2))))
+                .andExpect((jsonPath("$[1].name").value(equalTo("Filip Filipov"))))
+                .andExpect((jsonPath("$[1].gpId").value(equalTo(8))))
+                .andExpect((jsonPath("$[1].insured").value(equalTo(false))));
+    }
+
+    @Test
+    @DisplayName("Test get all not insured patients percentage")
+    void testGetAllNotInsuredPatientsPercentage() throws Exception {
+        when(patientService.getNotInsuredPatientsPercentage()).thenReturn(new BigDecimal("58.76"));
+        mockMvc.perform(get("/patients/not-insured-percentage"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(58.76))));
     }
 }

@@ -142,7 +142,7 @@ class DoctorServiceTest {
     @Test
     @DisplayName("Test countByIncomeGreaterThan")
     void testCountByIncomeGreaterThan() {
-        when(doctorRepository.countByIncomeGreaterThan(any(BigDecimal.class))).thenReturn(5);
-        assertEquals(5, doctorService.countByIncomeGreaterThan(new BigDecimal(12)));
+        when(doctorRepository.countByIncomeGreaterThan(any(BigDecimal.class))).thenReturn(5L);
+        assertEquals(5L, doctorService.countByIncomeGreaterThan(new BigDecimal(12)));
     }
 }

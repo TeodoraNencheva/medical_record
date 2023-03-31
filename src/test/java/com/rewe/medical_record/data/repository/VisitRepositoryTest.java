@@ -21,12 +21,11 @@ class VisitRepositoryTest {
     private VisitRepository visitRepository;
     @Autowired
     private TestEntityManager testEntityManager;
-    PatientEntity patient1, patient2;
     private VisitEntity first, second, third;
 
     @BeforeEach
     void setUp() {
-        PatientEntity patient1 = new PatientEntity("Ivan Ivanov", null, true, false);
+        PatientEntity patient1 = new PatientEntity("Ivan Ivanov", null, false, false);
         PatientEntity patient2 = new PatientEntity("Angel Angelov", null, true, false);
         DoctorEntity doctor1 = new DoctorEntity("Stoyan Stoyanov", LocalDate.of(1980, 4, 4), Set.of(), false);
         DoctorEntity doctor2 = new DoctorEntity("Nikola Nikolov", LocalDate.of(1970, 5, 5), Set.of(), false);
@@ -41,8 +40,8 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(diagnosis2);
         testEntityManager.persistAndFlush(fee);
 
-        first = new VisitEntity(patient1, doctor1, LocalDateTime.now(), Set.of(diagnosis1), fee, false, false);
-        second = new VisitEntity(patient1, doctor2, LocalDateTime.now(), Set.of(diagnosis2), fee, false, false);
+        first = new VisitEntity(patient1, doctor1, LocalDateTime.now(), Set.of(diagnosis1), fee, true, false);
+        second = new VisitEntity(patient1, doctor2, LocalDateTime.now(), Set.of(diagnosis2), fee, true, false);
         third = new VisitEntity(patient2, doctor2, LocalDateTime.now(), Set.of(diagnosis2), fee, false, false);
     }
 
@@ -63,8 +62,8 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(second);
         testEntityManager.persistAndFlush(third);
 
-        assertEquals(new BigDecimal("3.30"), visitRepository.getVisitsIncomeByDoctorId(first.getDoctor().getId()));
-        assertEquals(new BigDecimal("6.60"), visitRepository.getVisitsIncomeByDoctorId(second.getDoctor().getId()));
+        assertEquals(new BigDecimal("3.30"), visitRepository.getVisitsIncomeByDoctor(first.getDoctor()));
+        assertEquals(new BigDecimal("6.60"), visitRepository.getVisitsIncomeByDoctor(second.getDoctor()));
     }
 
     @Test
@@ -74,8 +73,8 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(second);
         testEntityManager.persistAndFlush(third);
 
-        assertEquals(2L, visitRepository.countAllByPatientId(first.getPatient().getId()));
-        assertEquals(1L, visitRepository.countAllByPatientId(third.getPatient().getId()));
+        assertEquals(2L, visitRepository.countAllByPatient(first.getPatient()));
+        assertEquals(1L, visitRepository.countAllByPatient(third.getPatient()));
     }
 
     @Test
@@ -85,7 +84,27 @@ class VisitRepositoryTest {
         testEntityManager.persistAndFlush(second);
         testEntityManager.persistAndFlush(third);
 
-        assertEquals(1L, visitRepository.countAllByContainingDiagnosisId(first.getDiagnoses().stream().toList().get(0).getId()));
-        assertEquals(2L, visitRepository.countAllByContainingDiagnosisId(second.getDiagnoses().stream().toList().get(0).getId()));
+        assertEquals(1L, visitRepository.countAllByDiagnosesContaining(first.getDiagnoses().iterator().next()));
+        assertEquals(2L, visitRepository.countAllByDiagnosesContaining(second.getDiagnoses().iterator().next()));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by diagnosis")
+    void testGetVisitsIncomeByDiagnosis() {
+        testEntityManager.persistAndFlush(first);
+        testEntityManager.persistAndFlush(second);
+        testEntityManager.persistAndFlush(third);
+
+        assertEquals(new BigDecimal("3.30"), visitRepository.getVisitsIncomeByDiagnosis(first.getDiagnoses().iterator().next()));
+        assertEquals(new BigDecimal("6.60"), visitRepository.getVisitsIncomeByDiagnosis(second.getDiagnoses().iterator().next()));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by non-insured patients")
+    void testGetVisitsIncomeByNonInsuredPatients() {
+        testEntityManager.persistAndFlush(first);
+        testEntityManager.persistAndFlush(second);
+        testEntityManager.persistAndFlush(third);
+        assertEquals(new BigDecimal("6.60"), visitRepository.getVisitsIncomeByNonInsuredPatients());
     }
 }

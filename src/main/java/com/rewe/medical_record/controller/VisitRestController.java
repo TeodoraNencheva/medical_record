@@ -63,7 +63,7 @@ public class VisitRestController {
     /*
     query 4
      */
-    @GetMapping("/visits-income-by-doctor")
+    @GetMapping("/income-by-doctor")
     public BigDecimal getVisitsIncomeByDoctorId(@RequestParam Long doctorId) {
         return visitService.getVisitsIncomeByDoctorId(doctorId);
     }
@@ -71,7 +71,7 @@ public class VisitRestController {
     /*
     query 5
      */
-    @GetMapping("/visits-count-by-patient")
+    @GetMapping("/count-by-patient")
     public long getVisitsCountByPatientId(@RequestParam Long patientId) {
         return visitService.countAllByPatientId(patientId);
     }
@@ -79,8 +79,24 @@ public class VisitRestController {
     /*
     query 6
      */
-    @GetMapping("/visits-count-by-diagnosis")
-    public long getVisitsCountByDiagnosisId(@ExistingDiagnosisId @RequestParam Long diagnosisId) {
+    @GetMapping("/count-by-diagnosis")
+    public long getVisitsCountByDiagnosisId(@RequestParam Long diagnosisId) {
         return visitService.countAllByContainingDiagnosisId(diagnosisId);
+    }
+
+    /*
+    query 8
+     */
+    @GetMapping("/income-by-diagnosis")
+    public BigDecimal getVisitsIncomeByDiagnosis(@RequestParam Long diagnosisId) {
+        return visitService.getVisitsIncomeByDiagnosisId(diagnosisId);
+    }
+
+    /*
+    query 9
+     */
+    @GetMapping("/income-by-non-insured-patients")
+    public BigDecimal getVisitsIncomeByNonInsuredPatients() {
+        return visitService.getVisitsIncomeByNonInsuredPatients();
     }
 }

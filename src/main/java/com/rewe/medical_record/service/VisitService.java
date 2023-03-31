@@ -3,8 +3,17 @@ package com.rewe.medical_record.service;
 import com.rewe.medical_record.data.dto.visit.AddVisitDto;
 import com.rewe.medical_record.data.dto.visit.UpdateVisitDto;
 import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
+import com.rewe.medical_record.data.entity.DiagnosisEntity;
+import com.rewe.medical_record.data.entity.DoctorEntity;
+import com.rewe.medical_record.data.entity.PatientEntity;
 import com.rewe.medical_record.data.entity.VisitEntity;
+import com.rewe.medical_record.data.repository.DiagnosisRepository;
+import com.rewe.medical_record.data.repository.DoctorRepository;
+import com.rewe.medical_record.data.repository.PatientRepository;
 import com.rewe.medical_record.data.repository.VisitRepository;
+import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
+import com.rewe.medical_record.exceptions.DoctorNotFoundException;
+import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import com.rewe.medical_record.exceptions.VisitNotFoundException;
 import com.rewe.medical_record.mapper.VisitMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +22,16 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class VisitService {
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final DiagnosisRepository diagnosisRepository;
 
     public List<VisitInfoDto> getAllVisits() {
         return visitRepository
@@ -63,14 +76,26 @@ public class VisitService {
     }
 
     public BigDecimal getVisitsIncomeByDoctorId(Long doctorId) {
-        return visitRepository.getVisitsIncomeByDoctorId(doctorId);
+        DoctorEntity doctorEntity = doctorRepository.findById(doctorId).orElseThrow(() -> new DoctorNotFoundException(doctorId));
+        return visitRepository.getVisitsIncomeByDoctor(doctorEntity);
     }
 
     public long countAllByPatientId(Long patientId) {
-        return visitRepository.countAllByPatientId(patientId);
+        PatientEntity patient = patientRepository.findById(patientId).orElseThrow(() -> new PatientNotFoundException(patientId));
+        return visitRepository.countAllByPatient(patient);
     }
 
     public long countAllByContainingDiagnosisId(Long diagnosisId) {
-        return visitRepository.countAllByContainingDiagnosisId(diagnosisId);
+        DiagnosisEntity diagnosisEntity = diagnosisRepository.findById(diagnosisId).orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
+        return visitRepository.countAllByDiagnosesContaining(diagnosisEntity);
+    }
+
+    public BigDecimal getVisitsIncomeByDiagnosisId(Long diagnosisId) {
+        DiagnosisEntity diagnosisEntity = diagnosisRepository.findById(diagnosisId).orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
+        return visitRepository.getVisitsIncomeByDiagnosis(diagnosisEntity);
+    }
+
+    public BigDecimal getVisitsIncomeByNonInsuredPatients() {
+        return visitRepository.getVisitsIncomeByNonInsuredPatients();
     }
 }

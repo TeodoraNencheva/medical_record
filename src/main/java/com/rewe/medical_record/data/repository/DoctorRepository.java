@@ -15,5 +15,5 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, Long> {
 
     @Query("select count(d) from DoctorEntity d " +
             "where (select sum(v.fee.price) from VisitEntity v where v.doctor=d) > :income")
-    int countByIncomeGreaterThan(BigDecimal income);
+    long countByIncomeGreaterThan(BigDecimal income);
 }

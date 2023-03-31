@@ -1,5 +1,8 @@
 package com.rewe.medical_record.data.repository;
 
+import com.rewe.medical_record.data.entity.DiagnosisEntity;
+import com.rewe.medical_record.data.entity.DoctorEntity;
+import com.rewe.medical_record.data.entity.PatientEntity;
 import com.rewe.medical_record.data.entity.VisitEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,13 +20,19 @@ public interface VisitRepository extends JpaRepository<VisitEntity, Long> {
     BigDecimal getAllVisitsIncome();
 
     @Query("select sum(v.fee.price) from VisitEntity v " +
-            "where v.doctor.id=:id")
-    BigDecimal getVisitsIncomeByDoctorId(Long id);
+            "where v.doctor=:doctor")
+    BigDecimal getVisitsIncomeByDoctor(DoctorEntity doctor);
 
-    long countAllByPatientId(Long id);
+    long countAllByPatient(PatientEntity patient);
 
-    @Query("select count(v) from VisitEntity v where " +
-            ":id in (select d.id from DiagnosisEntity d " +
-            "where d member of v.diagnoses)")
-    long countAllByContainingDiagnosisId(Long id);
+    @Query("select count(v) from VisitEntity v where :diagnosis member of v.diagnoses")
+    long countAllByDiagnosesContaining(DiagnosisEntity diagnosis);
+
+    @Query("select sum(v.fee.price) from VisitEntity v " +
+            "where :diagnosis member of v.diagnoses")
+    BigDecimal getVisitsIncomeByDiagnosis(DiagnosisEntity diagnosis);
+
+    @Query("select sum(v.fee.price) from VisitEntity v " +
+            "where v.paidByPatient=true")
+    BigDecimal getVisitsIncomeByNonInsuredPatients();
 }

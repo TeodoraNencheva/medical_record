@@ -4,7 +4,13 @@ import com.rewe.medical_record.data.dto.visit.AddVisitDto;
 import com.rewe.medical_record.data.dto.visit.UpdateVisitDto;
 import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
 import com.rewe.medical_record.data.entity.*;
+import com.rewe.medical_record.data.repository.DiagnosisRepository;
+import com.rewe.medical_record.data.repository.DoctorRepository;
+import com.rewe.medical_record.data.repository.PatientRepository;
 import com.rewe.medical_record.data.repository.VisitRepository;
+import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
+import com.rewe.medical_record.exceptions.DoctorNotFoundException;
+import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import com.rewe.medical_record.exceptions.VisitNotFoundException;
 import com.rewe.medical_record.mapper.VisitMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +38,12 @@ class VisitServiceTest {
     private VisitRepository visitRepository;
     @Mock
     private VisitMapper visitMapper;
+    @Mock
+    private DoctorRepository doctorRepository;
+    @Mock
+    private PatientRepository patientRepository;
+    @Mock
+    private DiagnosisRepository diagnosisRepository;
     @InjectMocks
     private VisitService visitService;
     private VisitEntity firstVisit, secondVisit;
@@ -145,21 +157,67 @@ class VisitServiceTest {
     @Test
     @DisplayName("Test getVisitsIncomeByDoctorId")
     void testGetVisitsIncomeByDoctorId() {
-        when(visitRepository.getVisitsIncomeByDoctorId(anyLong())).thenReturn(new BigDecimal("98.43"));
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(mock(DoctorEntity.class)));
+        when(visitRepository.getVisitsIncomeByDoctor(any(DoctorEntity.class))).thenReturn(new BigDecimal("98.43"));
         assertEquals(new BigDecimal("98.43"), visitService.getVisitsIncomeByDoctorId(5L));
+    }
+
+    @Test
+    @DisplayName("Test getVisitsIncomeByDoctorId throws")
+    void testGetVisitsIncomeByDoctorIdThrows() {
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(DoctorNotFoundException.class, () -> visitService.getVisitsIncomeByDoctorId(1L));
     }
 
     @Test
     @DisplayName("Test countAllByPatientId")
     void testCountAllByPatientId() {
-        when(visitRepository.countAllByPatientId(anyLong())).thenReturn(54L);
+        when(patientRepository.findById(anyLong())).thenReturn(Optional.of(mock(PatientEntity.class)));
+        when(visitRepository.countAllByPatient(any(PatientEntity.class))).thenReturn(54L);
         assertEquals(54L, visitService.countAllByPatientId(4L));
+    }
+
+    @Test
+    @DisplayName("Test countAllByPatientId throws")
+    void testCountAllByPatientIdThrows() {
+        when(patientRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(PatientNotFoundException.class, () -> visitService.countAllByPatientId(1L));
     }
 
     @Test
     @DisplayName("Test countAllByContainingDiagnosisId")
     void testCountAllByContainingDiagnosisId() {
-        when(visitRepository.countAllByContainingDiagnosisId(anyLong())).thenReturn(32L);
+        when(diagnosisRepository.findById(anyLong())).thenReturn(Optional.of(mock(DiagnosisEntity.class)));
+        when(visitRepository.countAllByDiagnosesContaining(any(DiagnosisEntity.class))).thenReturn(32L);
         assertEquals(32L, visitService.countAllByContainingDiagnosisId(6L));
+    }
+
+    @Test
+    @DisplayName("Test countAllByContainingDiagnosisId throws")
+    void testCountAllByContainingDiagnosisIdThrows() {
+        when(diagnosisRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(DiagnosisNotFoundException.class, () -> visitService.countAllByContainingDiagnosisId(1L));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by valid diagnosis")
+    void testGetVisitsIncomeByValidDiagnosis() {
+        when(diagnosisRepository.findById(anyLong())).thenReturn(Optional.of(mock(DiagnosisEntity.class)));
+        when(visitRepository.getVisitsIncomeByDiagnosis(any(DiagnosisEntity.class))).thenReturn(new BigDecimal("498.23"));
+        assertEquals(new BigDecimal("498.23"), visitService.getVisitsIncomeByDiagnosisId(3L));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by invalid diagnosis")
+    void testGetVisitsIncomeByInvalidDiagnosis() {
+        when(diagnosisRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(DiagnosisNotFoundException.class, () -> visitService.getVisitsIncomeByDiagnosisId(3L));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by non-insured patients")
+    void testGetVisitsIncomeByNonInsuredPatients() {
+        when(visitRepository.getVisitsIncomeByNonInsuredPatients()).thenReturn(new BigDecimal("74.29"));
+        assertEquals(new BigDecimal("74.29"), visitService.getVisitsIncomeByNonInsuredPatients());
     }
 }

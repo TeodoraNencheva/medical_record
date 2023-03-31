@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -160,5 +160,15 @@ class DoctorRestControllerTest {
 
         mockMvc.perform(delete("/doctors/{id}", 1L))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Test getDoctorCountWithGreaterIncomeThan")
+    void testGetDoctorCountWithGreaterIncomeThan() throws Exception {
+        when(doctorService.countByIncomeGreaterThan(any(BigDecimal.class))).thenReturn(12L);
+        mockMvc.perform(get("/doctors/with-greater-income-count")
+                        .param("income", "10"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$")).value(equalTo(12)));
     }
 }

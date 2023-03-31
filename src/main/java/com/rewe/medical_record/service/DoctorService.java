@@ -55,7 +55,7 @@ public class DoctorService {
         doctorRepository.save(doctorEntity);
     }
 
-    public int countByIncomeGreaterThan(BigDecimal income) {
+    public long countByIncomeGreaterThan(BigDecimal income) {
         return doctorRepository.countByIncomeGreaterThan(income);
     }
 }

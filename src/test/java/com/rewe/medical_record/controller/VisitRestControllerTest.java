@@ -12,6 +12,9 @@ import com.rewe.medical_record.data.repository.DiagnosisRepository;
 import com.rewe.medical_record.data.repository.DoctorRepository;
 import com.rewe.medical_record.data.repository.PatientRepository;
 import com.rewe.medical_record.data.repository.VisitRepository;
+import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
+import com.rewe.medical_record.exceptions.DoctorNotFoundException;
+import com.rewe.medical_record.exceptions.PatientNotFoundException;
 import com.rewe.medical_record.service.VisitService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -195,5 +198,103 @@ class VisitRestControllerTest {
 
         mockMvc.perform(delete("/visits/{id}", 4L))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Test get all visits income")
+    void testGetAllVisitsIncome() throws Exception {
+        when(visitService.getTotalVisitsIncome()).thenReturn(new BigDecimal("223.60"));
+        mockMvc.perform(get("/visits/all-visits-income"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(223.60))));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by valid doctor")
+    void testGetVisitsIncomeByValidDoctor() throws Exception {
+        when(visitService.getVisitsIncomeByDoctorId(anyLong())).thenReturn(new BigDecimal("143.59"));
+        mockMvc.perform(get("/visits/income-by-doctor")
+                        .param("doctorId", "4"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(143.59))));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by invalid doctor")
+    void testGetVisitsIncomeByInvalidDoctor() throws Exception {
+        when(visitService.getVisitsIncomeByDoctorId(anyLong())).thenThrow(new DoctorNotFoundException(4L));
+        mockMvc.perform(get("/visits/income-by-doctor")
+                        .param("doctorId", "4"))
+                .andExpect(status().isNotFound())
+                .andExpect((jsonPath("$.message").value(equalTo("Doctor with ID 4 not found"))));
+    }
+
+    @Test
+    @DisplayName("Test get visits count by valid patient")
+    void testGetVisitsCountByValidPatient() throws Exception {
+        when(visitService.countAllByPatientId(anyLong())).thenReturn(19L);
+        mockMvc.perform(get("/visits/count-by-patient")
+                        .param("patientId", "3"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(19))));
+    }
+
+    @Test
+    @DisplayName("Test get visits count by invalid patient")
+    void testGetVisitsCountByInvalidPatient() throws Exception {
+        when(visitService.countAllByPatientId(anyLong())).thenThrow(new PatientNotFoundException(7L));
+        mockMvc.perform(get("/visits/count-by-patient")
+                        .param("patientId", "7"))
+                .andExpect(status().isNotFound())
+                .andExpect((jsonPath("$.message").value(equalTo("Patient with ID 7 not found"))));
+    }
+
+    @Test
+    @DisplayName("Test get visits count by valid diagnosis")
+    void testGetVisitsCountByValidDiagnosis() throws Exception {
+        when(visitService.countAllByContainingDiagnosisId(anyLong())).thenReturn(86L);
+        mockMvc.perform(get("/visits/count-by-diagnosis")
+                        .param("diagnosisId", "3"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(86))));
+    }
+
+    @Test
+    @DisplayName("Test get visits count by invalid diagnosis")
+    void testGetVisitsCountByInvalidDiagnosis() throws Exception {
+        when(visitService.countAllByContainingDiagnosisId(anyLong())).thenThrow(new DiagnosisNotFoundException(17L));
+        mockMvc.perform(get("/visits/count-by-diagnosis")
+                        .param("diagnosisId", "17"))
+                .andExpect(status().isNotFound())
+                .andExpect((jsonPath("$.message").value(equalTo("Diagnosis with ID 17 not found"))));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by valid diagnosis")
+    void testGetVisitsIncomeByValidDiagnosis() throws Exception {
+        when(visitService.getVisitsIncomeByDiagnosisId(anyLong())).thenReturn(new BigDecimal("538.94"));
+        mockMvc.perform(get("/visits/income-by-diagnosis")
+                        .param("diagnosisId", "4"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(538.94))));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by invalid diagnosis")
+    void testGetVisitsIncomeByInvalidDiagnosis() throws Exception {
+        when(visitService.getVisitsIncomeByDiagnosisId(anyLong())).thenThrow(new DiagnosisNotFoundException(14L));
+        mockMvc.perform(get("/visits/income-by-diagnosis")
+                        .param("diagnosisId", "14"))
+                .andExpect(status().isNotFound())
+                .andExpect((jsonPath("$.message").value(equalTo("Diagnosis with ID 14 not found"))));
+    }
+
+    @Test
+    @DisplayName("Test get visits income by non-insured patients")
+    void testGetVisitsIncomeByNonInsuredPatients() throws Exception {
+        when(visitService.getVisitsIncomeByNonInsuredPatients()).thenReturn(new BigDecimal("89.53"));
+        mockMvc.perform(get("/visits/income-by-non-insured-patients"))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(89.53))));
     }
 }
