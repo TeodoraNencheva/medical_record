@@ -26,7 +26,9 @@ public class SpecialtyService {
     }
 
     public SpecialtyInfoDto getSpecialty(Long id) {
-        SpecialtyEntity specialty = specialtyRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new SpecialtyNotFoundException(id));
+        SpecialtyEntity specialty = specialtyRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new SpecialtyNotFoundException(id));
         return specialtyMapper.specialtyEntityToSpecialtyInfoDto(specialty);
     }
 
@@ -47,7 +49,9 @@ public class SpecialtyService {
     }
 
     public void deleteSpecialty(Long id) {
-        SpecialtyEntity specialty = specialtyRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new SpecialtyNotFoundException(id));
+        SpecialtyEntity specialty = specialtyRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new SpecialtyNotFoundException(id));
         specialty.setDeleted(true);
         specialtyRepository.save(specialty);
     }

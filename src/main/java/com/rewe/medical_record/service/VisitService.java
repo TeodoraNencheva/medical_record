@@ -41,7 +41,9 @@ public class VisitService {
     }
 
     public VisitInfoDto getVisitInfo(Long id) {
-        VisitEntity visitEntity = visitRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new VisitNotFoundException(id));
+        VisitEntity visitEntity = visitRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new VisitNotFoundException(id));
         return visitMapper.visitEntityToVisitInfoDto(visitEntity);
     }
 
@@ -52,7 +54,8 @@ public class VisitService {
     }
 
     public VisitInfoDto updateVisit(UpdateVisitDto updateVisitDto) {
-        VisitEntity toUpdate = visitRepository.findByIdAndDeletedFalse(updateVisitDto.getId())
+        VisitEntity toUpdate = visitRepository
+                .findByIdAndDeletedFalse(updateVisitDto.getId())
                 .orElseThrow(() -> new VisitNotFoundException(updateVisitDto.getId()));
 
         VisitEntity newProperties = visitMapper.updateVisitDtoToVisitEntity(updateVisitDto);
@@ -65,7 +68,9 @@ public class VisitService {
     }
 
     public void deleteVisit(Long id) {
-        VisitEntity visitEntity = visitRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new VisitNotFoundException(id));
+        VisitEntity visitEntity = visitRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new VisitNotFoundException(id));
         visitEntity.setDeleted(true);
         visitRepository.save(visitEntity);
     }
@@ -75,22 +80,30 @@ public class VisitService {
     }
 
     public BigDecimal getVisitsIncomeByDoctorId(Long doctorId) {
-        DoctorEntity doctorEntity = doctorRepository.findById(doctorId).orElseThrow(() -> new DoctorNotFoundException(doctorId));
+        DoctorEntity doctorEntity = doctorRepository
+                .findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException(doctorId));
         return visitRepository.getVisitsIncomeByDoctor(doctorEntity);
     }
 
     public long countAllByPatientId(Long patientId) {
-        PatientEntity patient = patientRepository.findById(patientId).orElseThrow(() -> new PatientNotFoundException(patientId));
+        PatientEntity patient = patientRepository
+                .findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException(patientId));
         return visitRepository.countAllByPatient(patient);
     }
 
     public long countAllByContainingDiagnosisId(Long diagnosisId) {
-        DiagnosisEntity diagnosisEntity = diagnosisRepository.findById(diagnosisId).orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
+        DiagnosisEntity diagnosisEntity = diagnosisRepository
+                .findById(diagnosisId)
+                .orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
         return visitRepository.countAllByDiagnosesContaining(diagnosisEntity);
     }
 
     public BigDecimal getVisitsIncomeByDiagnosisId(Long diagnosisId) {
-        DiagnosisEntity diagnosisEntity = diagnosisRepository.findById(diagnosisId).orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
+        DiagnosisEntity diagnosisEntity = diagnosisRepository
+                .findById(diagnosisId)
+                .orElseThrow(() -> new DiagnosisNotFoundException(diagnosisId));
         return visitRepository.getVisitsIncomeByDiagnosis(diagnosisEntity);
     }
 

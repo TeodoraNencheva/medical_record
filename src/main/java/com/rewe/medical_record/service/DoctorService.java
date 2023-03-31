@@ -27,7 +27,9 @@ public class DoctorService {
     }
 
     public DoctorInfoDto getDoctorInfo(Long id) {
-        DoctorEntity doctorEntity = doctorRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
+        DoctorEntity doctorEntity = doctorRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new DoctorNotFoundException(id));
         return doctorMapper.doctorEntityToDoctorInfoDto(doctorEntity);
     }
 
@@ -50,7 +52,9 @@ public class DoctorService {
     }
 
     public void deleteDoctor(Long id) {
-        DoctorEntity doctorEntity = doctorRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DoctorNotFoundException(id));
+        DoctorEntity doctorEntity = doctorRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new DoctorNotFoundException(id));
         doctorEntity.setDeleted(true);
         doctorRepository.save(doctorEntity);
     }
@@ -60,7 +64,9 @@ public class DoctorService {
     }
 
     public BigDecimal getIncomeByDoctorByInsuredPatients(Long doctorId) {
-        DoctorEntity doctorEntity = doctorRepository.findById(doctorId).orElseThrow(() -> new DoctorNotFoundException(doctorId));
+        DoctorEntity doctorEntity = doctorRepository
+                .findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException(doctorId));
         return doctorRepository.getIncomeByDoctorByInsuredPatients(doctorEntity);
     }
 }

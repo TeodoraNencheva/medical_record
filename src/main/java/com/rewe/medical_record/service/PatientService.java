@@ -50,7 +50,9 @@ public class PatientService {
     }
 
     public void deletePatient(Long id) {
-        PatientEntity patient = patientRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new PatientNotFoundException(id));
+        PatientEntity patient = patientRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new PatientNotFoundException(id));
         patient.setDeleted(true);
         patientRepository.save(patient);
     }
@@ -64,7 +66,9 @@ public class PatientService {
     }
 
     public BigDecimal getNotInsuredPatientsPercentage() {
-        double result = ((1.0 * patientRepository.countAllByInsuredFalseAndDeletedFalse()) / patientRepository.countAllByDeletedFalse()) * 100;
+        long notInsuredCount = patientRepository.countAllByInsuredFalseAndDeletedFalse();
+        long totalCount = patientRepository.countAllByDeletedFalse();
+        double result = ((1.0 * notInsuredCount) / totalCount) * 100;
         return new BigDecimal(result).setScale(2, RoundingMode.HALF_UP);
     }
 }

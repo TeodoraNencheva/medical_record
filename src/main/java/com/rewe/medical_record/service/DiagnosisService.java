@@ -8,7 +8,6 @@ import com.rewe.medical_record.data.repository.DiagnosisRepository;
 import com.rewe.medical_record.exceptions.DiagnosisNotFoundException;
 import com.rewe.medical_record.mapper.DiagnosisMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,9 @@ public class DiagnosisService {
     }
 
     public DiagnosisInfoDto getDiagnosis(Long id) {
-        DiagnosisEntity diagnosis = diagnosisRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DiagnosisNotFoundException(id));
+        DiagnosisEntity diagnosis = diagnosisRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new DiagnosisNotFoundException(id));
         return diagnosisMapper.diagnosisEntityToDiagnosisInfoDto(diagnosis);
     }
 
@@ -40,7 +41,9 @@ public class DiagnosisService {
 
     public DiagnosisInfoDto updateDiagnosis(UpdateDiagnosisDto diagnosisDto) {
         Long id = diagnosisDto.getId();
-        DiagnosisEntity toUpdate = diagnosisRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DiagnosisNotFoundException(id));
+        DiagnosisEntity toUpdate = diagnosisRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new DiagnosisNotFoundException(id));
         DiagnosisEntity newProperties = diagnosisMapper.updateDiagnosisDtoToDiagnosisEntity(diagnosisDto);
         toUpdate.setName(newProperties.getName());
         toUpdate.setDescription(newProperties.getDescription());
@@ -49,7 +52,9 @@ public class DiagnosisService {
     }
 
     public void deleteDiagnosis(Long id) {
-        DiagnosisEntity diagnosis = diagnosisRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new DiagnosisNotFoundException(id));
+        DiagnosisEntity diagnosis = diagnosisRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new DiagnosisNotFoundException(id));
         diagnosis.setDeleted(true);
         diagnosisRepository.save(diagnosis);
     }

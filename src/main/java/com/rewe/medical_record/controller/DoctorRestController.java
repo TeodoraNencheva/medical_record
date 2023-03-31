@@ -57,7 +57,7 @@ public class DoctorRestController {
     query 7
      */
     @GetMapping("/with-greater-income-count")
-    public long getDoctorCountWithGreaterIncomeThan(@RequestParam @Positive BigDecimal income) {
+    public long getDoctorsCountWithGreaterIncomeThan(@RequestParam @Positive BigDecimal income) {
         return doctorService.countByIncomeGreaterThan(income);
     }
 
