@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class ExistingDiagnosisIdValidator implements ConstraintValidator<ExistingDiagnosisId, Long> {
+public class ValidNewDiagnosisNameValidator implements ConstraintValidator<ValidNewDiagnosisName, String> {
     private final DiagnosisRepository diagnosisRepository;
 
     @Override
-    public boolean isValid(Long value, ConstraintValidatorContext context) {
-        return Objects.nonNull(value) && diagnosisRepository.findByIdAndDeletedFalse(value).isPresent();
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        return Objects.nonNull(value) && diagnosisRepository.findByNameAndDeletedFalse(value).isEmpty();
     }
 }

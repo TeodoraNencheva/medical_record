@@ -1,11 +1,9 @@
 package com.rewe.medical_record.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rewe.medical_record.data.dto.specialty.AddSpecialtyDto;
 import com.rewe.medical_record.data.dto.specialty.SpecialtyInfoDto;
 import com.rewe.medical_record.data.dto.specialty.UpdateSpecialtyDto;
-import com.rewe.medical_record.data.entity.DoctorEntity;
 import com.rewe.medical_record.data.entity.SpecialtyEntity;
 import com.rewe.medical_record.data.repository.SpecialtyRepository;
 import com.rewe.medical_record.service.SpecialtyService;
@@ -23,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,9 +28,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SpecialtyController.class)
+@WebMvcTest(SpecialtyRestController.class)
 @AutoConfigureMockMvc
-class SpecialtyControllerTest {
+class SpecialtyRestControllerTest {
     @MockBean
     private SpecialtyService specialtyService;
     @MockBean

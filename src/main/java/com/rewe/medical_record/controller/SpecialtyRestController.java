@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/specialties")
-public class SpecialtyController {
+public class SpecialtyRestController {
     private final SpecialtyService specialtyService;
 
     @GetMapping
