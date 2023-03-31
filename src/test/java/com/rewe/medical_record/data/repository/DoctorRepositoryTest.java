@@ -82,7 +82,28 @@ class DoctorRepositoryTest {
         testEntityManager.persistAndFlush(firstDoctor);
         testEntityManager.persistAndFlush(secondDoctor);
         testEntityManager.persistAndFlush(thirdDoctor);
+        loadVisits();
 
+        assertEquals(0, doctorRepository.countByIncomeGreaterThan(new BigDecimal(8)));
+        assertEquals(1, doctorRepository.countByIncomeGreaterThan(new BigDecimal(5)));
+        assertEquals(2, doctorRepository.countByIncomeGreaterThan(new BigDecimal(4)));
+        assertEquals(3, doctorRepository.countByIncomeGreaterThan(new BigDecimal(2)));
+    }
+
+    @Test
+    @DisplayName("Test get income by doctor by insured patients")
+    void testGetIncomeByDoctorByInsuredPatients() {
+        testEntityManager.persistAndFlush(firstDoctor);
+        testEntityManager.persistAndFlush(secondDoctor);
+        testEntityManager.persistAndFlush(thirdDoctor);
+        loadVisits();
+
+        assertEquals(new BigDecimal("5.00"), doctorRepository.getIncomeByDoctorByInsuredPatients(firstDoctor));
+        assertEquals(BigDecimal.ZERO, doctorRepository.getIncomeByDoctorByInsuredPatients(secondDoctor));
+        assertEquals(new BigDecimal("2.50"), doctorRepository.getIncomeByDoctorByInsuredPatients(thirdDoctor));
+    }
+
+    private void loadVisits() {
         FeeHistoryEntity fee = new FeeHistoryEntity(LocalDate.of(2022, 10, 20), new BigDecimal("2.50"));
         testEntityManager.persistAndFlush(fee);
         GeneralPractitionerEntity gp = new GeneralPractitionerEntity();
@@ -96,20 +117,15 @@ class DoctorRepositoryTest {
         testEntityManager.persistAndFlush(firstDoctorVisit1);
         VisitEntity firstDoctorVisit2 = new VisitEntity(patient, firstDoctor, LocalDateTime.now(), Set.of(), fee, false, false);
         testEntityManager.persistAndFlush(firstDoctorVisit2);
-        VisitEntity firstDoctorVisit3 = new VisitEntity(patient, firstDoctor, LocalDateTime.now(), Set.of(), fee, false, false);
+        VisitEntity firstDoctorVisit3 = new VisitEntity(patient, firstDoctor, LocalDateTime.now(), Set.of(), fee, true, false);
         testEntityManager.persistAndFlush(firstDoctorVisit3);
 
-        VisitEntity secondDoctorVisit = new VisitEntity(patient, secondDoctor, LocalDateTime.now(), Set.of(), fee, false, false);
+        VisitEntity secondDoctorVisit = new VisitEntity(patient, secondDoctor, LocalDateTime.now(), Set.of(), fee, true, false);
         testEntityManager.persistAndFlush(secondDoctorVisit);
 
         VisitEntity thirdDoctorVisit1 = new VisitEntity(patient, thirdDoctor, LocalDateTime.now(), Set.of(), fee, false, false);
         testEntityManager.persistAndFlush(thirdDoctorVisit1);
-        VisitEntity thirdDoctorVisit2 = new VisitEntity(patient, thirdDoctor, LocalDateTime.now(), Set.of(), fee, false, false);
+        VisitEntity thirdDoctorVisit2 = new VisitEntity(patient, thirdDoctor, LocalDateTime.now(), Set.of(), fee, true, false);
         testEntityManager.persistAndFlush(thirdDoctorVisit2);
-
-        assertEquals(0, doctorRepository.countByIncomeGreaterThan(new BigDecimal(8)));
-        assertEquals(1, doctorRepository.countByIncomeGreaterThan(new BigDecimal(5)));
-        assertEquals(2, doctorRepository.countByIncomeGreaterThan(new BigDecimal(4)));
-        assertEquals(3, doctorRepository.countByIncomeGreaterThan(new BigDecimal(2)));
     }
 }

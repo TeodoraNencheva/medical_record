@@ -8,6 +8,7 @@ import com.rewe.medical_record.data.entity.DoctorEntity;
 import com.rewe.medical_record.data.entity.SpecialtyEntity;
 import com.rewe.medical_record.data.repository.DoctorRepository;
 import com.rewe.medical_record.data.repository.SpecialtyRepository;
+import com.rewe.medical_record.exceptions.DoctorNotFoundException;
 import com.rewe.medical_record.service.DoctorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -170,5 +171,23 @@ class DoctorRestControllerTest {
                         .param("income", "10"))
                 .andExpect(status().isOk())
                 .andExpect((jsonPath("$")).value(equalTo(12)));
+    }
+
+    @Test
+    @DisplayName("Test get income by valid doctor by non-insured patients")
+    void testGetIncomeByValidDoctorByNonInsuredPatients() throws Exception {
+        when(doctorService.getIncomeByDoctorByInsuredPatients(anyLong())).thenReturn(new BigDecimal("208.93"));
+        mockMvc.perform(get("/doctors/{id}/income-by-insured-patients", 3L))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$").value(equalTo(208.93))));
+    }
+
+    @Test
+    @DisplayName("Test get income by invalid doctor by non-insured patients")
+    void testGetIncomeByInvalidDoctorByNonInsuredPatients() throws Exception {
+        when(doctorService.getIncomeByDoctorByInsuredPatients(anyLong())).thenThrow(new DoctorNotFoundException(15L));
+        mockMvc.perform(get("/doctors/{id}/income-by-insured-patients", 15L))
+                .andExpect(status().isNotFound())
+                .andExpect((jsonPath("$.message").value(equalTo("Doctor with ID 15 not found"))));
     }
 }

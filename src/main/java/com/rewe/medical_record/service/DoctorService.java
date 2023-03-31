@@ -58,4 +58,9 @@ public class DoctorService {
     public long countByIncomeGreaterThan(BigDecimal income) {
         return doctorRepository.countByIncomeGreaterThan(income);
     }
+
+    public BigDecimal getIncomeByDoctorByInsuredPatients(Long doctorId) {
+        DoctorEntity doctorEntity = doctorRepository.findById(doctorId).orElseThrow(() -> new DoctorNotFoundException(doctorId));
+        return doctorRepository.getIncomeByDoctorByInsuredPatients(doctorEntity);
+    }
 }

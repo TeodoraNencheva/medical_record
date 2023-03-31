@@ -16,10 +16,10 @@ public interface VisitRepository extends JpaRepository<VisitEntity, Long> {
 
     List<VisitEntity> findAllByDeletedFalse();
 
-    @Query("SELECT SUM(v.fee.price) FROM VisitEntity v")
+    @Query("SELECT COALESCE(SUM(v.fee.price), 0) FROM VisitEntity v")
     BigDecimal getAllVisitsIncome();
 
-    @Query("select sum(v.fee.price) from VisitEntity v " +
+    @Query("select COALESCE(sum(v.fee.price), 0) from VisitEntity v " +
             "where v.doctor=:doctor")
     BigDecimal getVisitsIncomeByDoctor(DoctorEntity doctor);
 
@@ -28,11 +28,11 @@ public interface VisitRepository extends JpaRepository<VisitEntity, Long> {
     @Query("select count(v) from VisitEntity v where :diagnosis member of v.diagnoses")
     long countAllByDiagnosesContaining(DiagnosisEntity diagnosis);
 
-    @Query("select sum(v.fee.price) from VisitEntity v " +
+    @Query("select COALESCE(sum(v.fee.price), 0) from VisitEntity v " +
             "where :diagnosis member of v.diagnoses")
     BigDecimal getVisitsIncomeByDiagnosis(DiagnosisEntity diagnosis);
 
-    @Query("select sum(v.fee.price) from VisitEntity v " +
+    @Query("select COALESCE(sum(v.fee.price), 0) from VisitEntity v " +
             "where v.paidByPatient=true")
     BigDecimal getVisitsIncomeByNonInsuredPatients();
 }

@@ -5,7 +5,6 @@ import com.rewe.medical_record.data.dto.visit.UpdateVisitDto;
 import com.rewe.medical_record.data.dto.visit.VisitInfoDto;
 import com.rewe.medical_record.service.ResponseService;
 import com.rewe.medical_record.service.VisitService;
-import com.rewe.medical_record.validation.ExistingDiagnosisId;
 import com.rewe.medical_record.validation.ExistingVisitId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

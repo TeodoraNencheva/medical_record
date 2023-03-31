@@ -25,8 +25,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DoctorServiceTest {
@@ -144,5 +143,20 @@ class DoctorServiceTest {
     void testCountByIncomeGreaterThan() {
         when(doctorRepository.countByIncomeGreaterThan(any(BigDecimal.class))).thenReturn(5L);
         assertEquals(5L, doctorService.countByIncomeGreaterThan(new BigDecimal(12)));
+    }
+
+    @Test
+    @DisplayName("Test get income by valid doctor by insured patients")
+    void testGetIncomeByValidDoctorByInsuredPatients() {
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(mock(DoctorEntity.class)));
+        when(doctorRepository.getIncomeByDoctorByInsuredPatients(any(DoctorEntity.class))).thenReturn(new BigDecimal("403.28"));
+        assertEquals(new BigDecimal("403.28"), doctorService.getIncomeByDoctorByInsuredPatients(1L));
+    }
+
+    @Test
+    @DisplayName("Test get income by invalid doctor by insured patients")
+    void testGetIncomeByInvalidDoctorBynInsuredPatients() {
+        when(doctorRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(DoctorNotFoundException.class, () -> doctorService.getIncomeByDoctorByInsuredPatients(1L));
     }
 }

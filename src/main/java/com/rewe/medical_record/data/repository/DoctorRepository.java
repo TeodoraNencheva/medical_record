@@ -14,6 +14,10 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity, Long> {
     Optional<DoctorEntity> findByIdAndDeletedFalse(Long id);
 
     @Query("select count(d) from DoctorEntity d " +
-            "where (select sum(v.fee.price) from VisitEntity v where v.doctor=d) > :income")
+            "where (select COALESCE(sum(v.fee.price), 0) from VisitEntity v where v.doctor=d) > :income")
     long countByIncomeGreaterThan(BigDecimal income);
+
+    @Query("select COALESCE(sum(v.fee.price), 0) from VisitEntity v " +
+            "where v.doctor=:doctorEntity and v.paidByPatient=false")
+    BigDecimal getIncomeByDoctorByInsuredPatients(DoctorEntity doctorEntity);
 }

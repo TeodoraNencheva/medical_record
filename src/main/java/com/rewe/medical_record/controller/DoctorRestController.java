@@ -60,4 +60,12 @@ public class DoctorRestController {
     public long getDoctorCountWithGreaterIncomeThan(@RequestParam @Positive BigDecimal income) {
         return doctorService.countByIncomeGreaterThan(income);
     }
+
+    /*
+    query 10
+     */
+    @GetMapping("/{id}/income-by-insured-patients")
+    public BigDecimal getIncomeByDoctorByInsuredPatients(@PathVariable Long id) {
+        return doctorService.getIncomeByDoctorByInsuredPatients(id);
+    }
 }
