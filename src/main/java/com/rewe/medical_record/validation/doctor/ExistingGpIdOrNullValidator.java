@@ -1,4 +1,4 @@
-package com.rewe.medical_record.validation;
+package com.rewe.medical_record.validation.doctor;
 
 import com.rewe.medical_record.data.repository.GeneralPractitionerRepository;
 import jakarta.validation.ConstraintValidator;

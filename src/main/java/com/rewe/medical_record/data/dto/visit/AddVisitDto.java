@@ -1,8 +1,8 @@
 package com.rewe.medical_record.data.dto.visit;
 
-import com.rewe.medical_record.validation.ExistingDoctorId;
-import com.rewe.medical_record.validation.ExistingPatientId;
-import com.rewe.medical_record.validation.ValidDiagnosesIds;
+import com.rewe.medical_record.validation.doctor.ExistingDoctorId;
+import com.rewe.medical_record.validation.patient.ExistingPatientId;
+import com.rewe.medical_record.validation.diagnosis.ValidDiagnosesIds;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

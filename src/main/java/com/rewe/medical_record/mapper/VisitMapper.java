@@ -43,12 +43,18 @@ public abstract class VisitMapper {
     @Mapping(target = "diagnoses", source = "diagnoses", qualifiedByName = "getDiagnoses")
     @Mapping(target = "fee", expression = "java(feeHistoryRepository.findTopByOrderByEffectiveFromDesc().orElseThrow())")
     @Mapping(target = "paidByPatient", source = "patientId", qualifiedByName = "getPaidByPatient")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dateTime", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     public abstract VisitEntity addVisitDtoToVisitEntity(AddVisitDto addVisitDto);
 
     @Mapping(target = "doctor", source = "doctorId", qualifiedByName = "getDoctorById")
     @Mapping(target = "patient", source = "patientId", qualifiedByName = "getPatientById")
     @Mapping(target = "diagnoses", source = "diagnoses", qualifiedByName = "getDiagnoses")
     @Mapping(target = "paidByPatient", source = "patientId", qualifiedByName = "getPaidByPatient")
+    @Mapping(target = "dateTime", ignore = true)
+    @Mapping(target = "fee", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     public abstract VisitEntity updateVisitDtoToVisitEntity(UpdateVisitDto updateVisitDto);
 
     @Named("diagnosesNames")

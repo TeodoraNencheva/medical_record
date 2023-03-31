@@ -1,9 +1,8 @@
 package com.rewe.medical_record.data.dto.doctor;
 
-import com.rewe.medical_record.validation.ExistingDoctorId;
-import com.rewe.medical_record.validation.ValidSpecialties;
+import com.rewe.medical_record.validation.doctor.ExistingDoctorId;
+import com.rewe.medical_record.validation.specialty.ValidSpecialties;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

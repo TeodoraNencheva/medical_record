@@ -96,7 +96,7 @@ class DoctorRestControllerTest {
     @Test
     @DisplayName("Test add doctor")
     void testAddDoctor() throws Exception {
-        when(specialtyRepository.findByName(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
+        when(specialtyRepository.findByNameAndDeletedFalse(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
         AddDoctorDto addDoctorDto = new AddDoctorDto("Ivan Ivanov", LocalDate.of(1985, 2, 2), Set.of("Anesthesiology", "Dermatology"));
         DoctorInfoDto doctorInfoDto = new DoctorInfoDto(5L, "Ivan Ivanov", LocalDate.of(1985, 2, 2), Set.of("Anesthesiology", "Dermatology"));
         when(doctorService.addDoctor(ArgumentMatchers.any(AddDoctorDto.class))).thenReturn(doctorInfoDto);
@@ -114,7 +114,7 @@ class DoctorRestControllerTest {
     @Test
     @DisplayName("Test update doctor with invalid id")
     void testAddDoctorWithInvalidId() throws Exception {
-        when(specialtyRepository.findByName(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
+        when(specialtyRepository.findByNameAndDeletedFalse(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
         when(doctorRepository.findByIdAndDeletedFalse(anyLong())).thenReturn(Optional.empty());
         UpdateDoctorDto updateDoctorDto = new UpdateDoctorDto(1L, "Ivan Ivanov", Set.of("Anesthesiology", "Dermatology"));
 
@@ -127,7 +127,7 @@ class DoctorRestControllerTest {
     @Test
     @DisplayName("Test update doctor with valid id")
     void testUpdateDoctorWithValidId() throws Exception {
-        when(specialtyRepository.findByName(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
+        when(specialtyRepository.findByNameAndDeletedFalse(anyString())).thenReturn(Optional.of(mock(SpecialtyEntity.class)));
         when(doctorRepository.findByIdAndDeletedFalse(anyLong())).thenReturn(Optional.of(mock(DoctorEntity.class)));
         UpdateDoctorDto updateDoctorDto = new UpdateDoctorDto(1L, "Ivan Ivanov", Set.of("Anesthesiology", "Dermatology"));
         DoctorInfoDto doctorInfoDto = new DoctorInfoDto(1L, "Angel Angelov", LocalDate.of(1982, 6, 6), Set.of("Cardiology", "Pediatrics"));

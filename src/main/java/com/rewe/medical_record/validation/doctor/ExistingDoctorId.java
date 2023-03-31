@@ -1,4 +1,4 @@
-package com.rewe.medical_record.validation;
+package com.rewe.medical_record.validation.doctor;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

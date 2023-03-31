@@ -5,7 +5,7 @@ import com.rewe.medical_record.data.dto.doctor.DoctorInfoDto;
 import com.rewe.medical_record.data.dto.doctor.UpdateDoctorDto;
 import com.rewe.medical_record.service.DoctorService;
 import com.rewe.medical_record.service.ResponseService;
-import com.rewe.medical_record.validation.ExistingDoctorId;
+import com.rewe.medical_record.validation.doctor.ExistingDoctorId;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;

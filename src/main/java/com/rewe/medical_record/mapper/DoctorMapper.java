@@ -23,9 +23,13 @@ public abstract class DoctorMapper {
     public abstract DoctorInfoDto doctorEntityToDoctorInfoDto(DoctorEntity doctorEntity);
 
     @Mapping(target = "specialties", source = "specialties", qualifiedByName = "specialtyEntities")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     public abstract DoctorEntity addDoctorDtoToDoctorEntity(AddDoctorDto addDoctorDto);
 
     @Mapping(target = "specialties", source = "specialties", qualifiedByName = "specialtyEntities")
+    @Mapping(target = "birthDate", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     public abstract DoctorEntity updateDoctorDtoToDoctorEntity(UpdateDoctorDto updateDoctorDto);
 
     @Named("specialtiesNames")
@@ -35,6 +39,6 @@ public abstract class DoctorMapper {
 
     @Named("specialtyEntities")
     protected Set<SpecialtyEntity> getSpecialtyEntities(Set<String> specialtyNames) {
-        return specialtyNames.stream().map(n -> specialtyRepository.findByName(n).orElse(null)).collect(Collectors.toSet());
+        return specialtyNames.stream().map(n -> specialtyRepository.findByNameAndDeletedFalse(n).orElse(null)).collect(Collectors.toSet());
     }
 }

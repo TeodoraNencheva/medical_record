@@ -1,4 +1,4 @@
-package com.rewe.medical_record.validation;
+package com.rewe.medical_record.validation.visit;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(validatedBy = ExistingDiagnosisIdValidator.class)
-public @interface ExistingDiagnosisId {
-    String message() default "No diagnosis with the given ID found";
+@Constraint(validatedBy = ExistingVisitIdValidator.class)
+public @interface ExistingVisitId {
+    String message() default "No visit with the given ID found";
 
     Class<?>[] groups() default {};
 

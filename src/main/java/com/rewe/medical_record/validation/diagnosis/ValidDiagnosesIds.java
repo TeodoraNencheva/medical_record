@@ -1,4 +1,4 @@
-package com.rewe.medical_record.validation;
+package com.rewe.medical_record.validation.diagnosis;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(validatedBy = ExistingPatientIdValidator.class)
-public @interface ExistingPatientId {
-    String message() default "No patient with the given ID found";
+@Constraint(validatedBy = ValidDiagnosesIdsValidator.class)
+public @interface ValidDiagnosesIds {
+    String message() default "Diagnoses IDs are required and must be valid";
 
     Class<?>[] groups() default {};
 

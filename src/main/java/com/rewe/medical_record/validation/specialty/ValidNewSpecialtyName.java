@@ -1,4 +1,4 @@
-package com.rewe.medical_record.validation;
+package com.rewe.medical_record.validation.specialty;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_USE, ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(validatedBy = ValidSpecialtiesValidation.class)
-public @interface ValidSpecialties {
-    String message() default "Please provide valid specialty names or empty collection";
+@Constraint(validatedBy = ValidNewSpecialtyNameValidator.class)
+public @interface ValidNewSpecialtyName {
+    String message() default "Specialty name should be unique";
 
     Class<?>[] groups() default {};
 

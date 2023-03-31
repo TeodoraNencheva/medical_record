@@ -20,4 +20,7 @@ public class SpecialtyEntity extends BaseEntity {
     @Size(min = 3, message = "Specialty name should be 3 or more characters")
     private String name;
     private String description;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 }

@@ -5,7 +5,7 @@ import com.rewe.medical_record.data.dto.patient.PatientInfoDTO;
 import com.rewe.medical_record.data.dto.patient.UpdatePatientDto;
 import com.rewe.medical_record.service.PatientService;
 import com.rewe.medical_record.service.ResponseService;
-import com.rewe.medical_record.validation.ExistingPatientId;
+import com.rewe.medical_record.validation.patient.ExistingPatientId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

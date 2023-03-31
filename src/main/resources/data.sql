@@ -5,7 +5,7 @@ insert into general_practitioner (id)
 values (1);
 
 insert into specialty (name)
-values ("Cardiologist"),
+values ("Cardiology"),
        ("Paediatrics"),
        ("Oncology"),
        ("Pathology");

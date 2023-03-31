@@ -21,8 +21,11 @@ public abstract class PatientMapper {
     @Mapping(source = "gp.id", target = "gpId")
     public abstract PatientInfoDTO patientEntityToPatientInfoDto(PatientEntity patientEntity);
     @Mapping(target = "gp", source = "gpId", qualifiedByName = "setGp")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
     public abstract PatientEntity addPatientDtoToPatientEntity(AddPatientDto patientDto);
     @Mapping(target = "gp", source = "gpId", qualifiedByName = "setGp")
+    @Mapping(target = "deleted", ignore = true)
     public abstract PatientEntity updatePatientDtoToPatientEntity(UpdatePatientDto patientDto);
 
     @Named("setGp")

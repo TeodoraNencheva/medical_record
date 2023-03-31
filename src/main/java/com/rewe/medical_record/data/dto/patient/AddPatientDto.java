@@ -1,6 +1,6 @@
 package com.rewe.medical_record.data.dto.patient;
 
-import com.rewe.medical_record.validation.ExistingGpIdOrNull;
+import com.rewe.medical_record.validation.doctor.ExistingGpIdOrNull;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
