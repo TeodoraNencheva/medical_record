@@ -58,3 +58,7 @@
 ### 8. Getting the total income of all visits by diagnosis
 ### 9. Getting the total income of visit fees of non-insured patients
 ### 10. Getting the total income of visit fees of a particular doctor of non-insured patients
+
+## IV. Test coverage
+* unit and integration tests with total line coverage of 68%
+![test coverage](https://user-images.githubusercontent.com/79698998/233066013-d9ffde49-c500-45b7-a1a8-a63806e307a0.PNG)
